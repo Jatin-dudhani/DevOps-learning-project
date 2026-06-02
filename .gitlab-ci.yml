@@ -1,0 +1,25 @@
+stages:
+  - build
+  - test
+
+build-job:
+  stage: build
+  script:
+    - echo "Building website..."
+    - mkdir public
+    - cp index.html public/
+    - cp style.css public/
+    - cp script.js public/
+
+  artifacts:
+    paths:
+      - public/
+
+test-job:
+  stage: test
+  script:
+    - echo "Testing website files..."
+    - test -f index.html
+    - test -f style.css
+    - test -f script.js
+    - echo "All tests passed"
