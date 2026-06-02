@@ -47,7 +47,7 @@ deploy-job:
     
     - echo "USER=$EC2_USER"
 
-    - ssh-keyscan -H $EC2_HOST >> ~/.ssh/known_hosts
+    - ssh-keyscan -T 10 -H $EC2_HOST
 
     - scp -r public/* $EC2_USER@$EC2_HOST:/tmp/
 
