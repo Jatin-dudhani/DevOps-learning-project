@@ -30,9 +30,6 @@ test-job:
 deploy-job:
   stage: deploy
 
-  dependencies:
-    - build-job
-
   before_script:
     - apk add --no-cache openssh
 
@@ -43,13 +40,7 @@ deploy-job:
 
     - chmod 600 ~/.ssh/id_rsa
 
-    - echo "HOST=$EC2_HOST"
-    
-    - echo "USER=$EC2_USER"
-
-    - apk add --no-cache netcat-openbsd
-    
-    - nc -vz $EC2_HOST 22
+    - ssh-keyscan -H $EC2_HOST >> ~/.ssh/known_hosts
 
     - scp -r public/* $EC2_USER@$EC2_HOST:/tmp/
 
