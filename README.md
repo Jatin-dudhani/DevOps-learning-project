@@ -89,6 +89,10 @@ Initially deployed manually to an AWS EC2 instance running Nginx.
 
 Created a GitLab pipeline with multiple stages:
 
+### GitLab CI/CD Pipeline
+
+![GitLab Pipeline](images/pipeline.png)
+
 ### Build Stage
 
 Responsibilities:
@@ -111,6 +115,10 @@ Responsibilities:
 * Connect to EC2 using SSH
 * Upload website files
 * Deploy automatically
+
+### Website Running on AWS EC2
+
+![Website](images/website.png)
 
 ---
 
@@ -166,6 +174,10 @@ Learned:
 * Containers
 * Docker Build Process
 * Nginx Containers
+
+### Docker Hub Repository
+
+![Docker Hub](images/dockerhub.png)
 
 ---
 
