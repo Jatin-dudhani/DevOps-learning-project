@@ -43,6 +43,10 @@ deploy-job:
 
     - chmod 600 ~/.ssh/id_rsa
 
+    - echo "HOST=$EC2_HOST"
+    
+    - echo "USER=$EC2_USER"
+
     - ssh-keyscan -H $EC2_HOST >> ~/.ssh/known_hosts
 
     - scp -r public/* $EC2_USER@$EC2_HOST:/tmp/
