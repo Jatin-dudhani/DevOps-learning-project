@@ -20,9 +20,9 @@ test-job:
   stage: test
   script:
     - echo "Testing website files..."
-    - test -f index.html
-    - test -f style.css
-    - test -f script.js
+    - test -f public/index.html
+    - test -f public/style.css
+    - test -f public/script.js
     - echo "All tests passed"
 
 pages:
