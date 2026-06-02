@@ -47,7 +47,9 @@ deploy-job:
     
     - echo "USER=$EC2_USER"
 
-    - ssh-keyscan -T 10 -H $EC2_HOST
+    - apk add --no-cache netcat-openbsd
+    
+    - nc -vz $EC2_HOST 22
 
     - scp -r public/* $EC2_USER@$EC2_HOST:/tmp/
 
