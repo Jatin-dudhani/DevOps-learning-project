@@ -28,15 +28,23 @@ test-job:
 docker-build:
   stage: docker
 
+  dependencies:
+    - build-job
+
   image: docker:latest
 
   services:
     - docker:dind
 
+  variables:
+    DOCKER_TLS_CERTDIR: ""
+
   script:
-    - docker version
-    - docker build -t my-static-site .
-    - docker images
+    - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
+
+    - docker build -t $DOCKER_USERNAME/my-static-site:latest .
+
+    - docker push $DOCKER_USERNAME/my-static-site:latest
     
 deploy-job:
   stage: deploy
