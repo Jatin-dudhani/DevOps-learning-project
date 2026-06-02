@@ -4,6 +4,7 @@ image: alpine:latest
 stages:
   - build
   - test
+  - docker
   - deploy
 
 build-job:
@@ -24,6 +25,18 @@ test-job:
     - chmod +x scripts/test.sh
     - sh scripts/test.sh
 
+docker-build:
+  stage: docker
+
+  image: docker:latest
+
+  services:
+    - docker:dind
+
+  script:
+    - docker version
+    - docker build -t my-static-site .
+    
 deploy-job:
   stage: deploy
 
