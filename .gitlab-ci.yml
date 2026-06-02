@@ -36,6 +36,7 @@ docker-build:
   script:
     - docker version
     - docker build -t my-static-site .
+    - docker images
     
 deploy-job:
   stage: deploy
