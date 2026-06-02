@@ -1,6 +1,7 @@
 stages:
   - build
   - test
+  - deploy
 
 build-job:
   stage: build
@@ -23,3 +24,15 @@ test-job:
     - test -f style.css
     - test -f script.js
     - echo "All tests passed"
+
+pages:
+  stage: deploy
+  dependencies:
+    - build-job
+
+  script:
+    - echo "Deploying to GitLab Pages"
+
+  artifacts:
+    paths:
+      - public/    
