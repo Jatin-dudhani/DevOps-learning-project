@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitLab Learning Hub</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <h1>GitLab Learning Hub</h1>
+        <p>Learning CI/CD one pipeline at a time.</p>
+    </header>
+
+    <main>
+        <section class="card">
+            <h2>What is GitLab?</h2>
+            <p>
+                GitLab is a DevOps platform that provides Git repositories,
+                CI/CD pipelines, issue tracking, and deployment tools.
+            </p>
+        </section>
+
+        <section class="card">
+            <h2>Pipeline Status</h2>
+            <button onclick="showMessage()">
+                Run Demo Check
+            </button>
+
+            <p id="result"></p>
+        </section>
+
+        <section class="card">
+            <h2>Learning Goals</h2>
+            <ul>
+                <li>Create Jobs</li>
+                <li>Use Stages</li>
+                <li>Upload Artifacts</li>
+                <li>Deploy with GitLab Pages</li>
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <p>Created while learning GitLab CI/CD</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
