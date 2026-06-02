@@ -19,12 +19,10 @@ build-job:
 
 test-job:
   stage: test
+
   script:
-    - echo "Testing website files..."
-    - test -f public/index.html
-    - test -f public/style.css
-    - test -f public/script.js
-    - echo "All tests passed"
+    - chmod +x scripts/test.sh
+    - sh scripts/test.sh
 
 deploy-job:
   stage: deploy
@@ -33,17 +31,8 @@ deploy-job:
     - apk add --no-cache openssh
 
   script:
-    - mkdir -p ~/.ssh
-
-    - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-
-    - chmod 600 ~/.ssh/id_rsa
-
-    - ssh-keyscan -H $EC2_HOST >> ~/.ssh/known_hosts
-
-    - scp -r public/* $EC2_USER@$EC2_HOST:/tmp/
-
-    - ssh $EC2_USER@$EC2_HOST "sudo cp -r /tmp/* /var/www/html/"
+    - chmod +x scripts/deploy.sh
+    - sh scripts/deploy.sh
 
 
 
