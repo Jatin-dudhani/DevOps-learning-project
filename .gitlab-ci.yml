@@ -1,72 +1,119 @@
+# ==============================================================================
+# GitLab CI/CD Pipeline - DevOps Learning Hub
+# Production-Hardened Multi-Stage Pipeline with Security Scanning & Docker
+# ==============================================================================
 
-image: alpine:latest
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH
+
+default:
+  image: alpine:latest
+  interruptible: true
 
 stages:
   - build
   - test
+  - security
   - docker
   - deploy
 
+# ------------------------------------------------------------------------------
+# Stage 1: Build
+# ------------------------------------------------------------------------------
 build-job:
   stage: build
-
+  before_script:
+    - apk add --no-cache bash git
   script:
     - chmod +x scripts/build.sh
-    - sh scripts/build.sh
-
+    - ./scripts/build.sh
   artifacts:
+    name: "devops-hub-build-$CI_COMMIT_SHORT_SHA"
+    expire_in: 1 week
     paths:
       - public/
 
+# ------------------------------------------------------------------------------
+# Stage 2: Automated Tests
+# ------------------------------------------------------------------------------
 test-job:
   stage: test
-
-  script:
-    - chmod +x scripts/test.sh
-    - sh scripts/test.sh
-
-docker-build:
-  stage: docker
-
   dependencies:
     - build-job
+  before_script:
+    - apk add --no-cache bash nodejs
+  script:
+    - chmod +x scripts/test.sh
+    - ./scripts/test.sh
 
-  image: docker:latest
+# ------------------------------------------------------------------------------
+# Stage 3: Security & SAST Audit
+# ------------------------------------------------------------------------------
+security-scan:
+  stage: security
+  dependencies:
+    - build-job
+  before_script:
+    - apk add --no-cache bash grep
+  script:
+    - echo "🛡️ Running pre-deployment secret and permission verification..."
+    - "! grep -riE -e '-----BEGIN[ A-Z]*PRIVATE KEY' public/ || (echo '❌ Private key detected in build artifacts!' && exit 1)"
+    - "! grep -riE 'AKIA[0-9A-Z]{16}' public/ || (echo '❌ AWS access key detected in artifacts!' && exit 1)"
+    - echo "✅ Security scan passed with zero findings."
 
+# ------------------------------------------------------------------------------
+# Stage 4: Docker Container Build & Registry Publishing
+# ------------------------------------------------------------------------------
+docker-build:
+  stage: docker
+  dependencies:
+    - build-job
+  image: docker:24-cli
   services:
-    - docker:dind
-
+    - docker:24-dind
   variables:
     DOCKER_TLS_CERTDIR: ""
-
+    DOCKER_IMAGE_NAME: "$DOCKER_USERNAME/my-static-site"
+  rules:
+    - if: '$DOCKER_USERNAME && $DOCKER_PASSWORD'
+  before_script:
+    # SECURITY FIX: Pass password via stdin to prevent exposure in process table or logs
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
   script:
-    - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
+    - echo "Building Docker image with commit tag ($CI_COMMIT_SHORT_SHA)..."
+    - docker build -t "$DOCKER_IMAGE_NAME:$CI_COMMIT_SHORT_SHA" -t "$DOCKER_IMAGE_NAME:latest" .
+    - echo "Pushing versioned and latest images to Docker Hub..."
+    - docker push "$DOCKER_IMAGE_NAME:$CI_COMMIT_SHORT_SHA"
+    - docker push "$DOCKER_IMAGE_NAME:latest"
 
-    - docker build -t $DOCKER_USERNAME/my-static-site:latest .
-
-    - docker push $DOCKER_USERNAME/my-static-site:latest
-    
+# ------------------------------------------------------------------------------
+# Stage 5: Production Deployment to AWS EC2
+# ------------------------------------------------------------------------------
 deploy-job:
   stage: deploy
-
+  dependencies:
+    - build-job
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
   before_script:
-    - apk add --no-cache openssh
-
+    - apk add --no-cache bash openssh-client
   script:
     - chmod +x scripts/deploy.sh
-    - sh scripts/deploy.sh
+    - ./scripts/deploy.sh
 
-
-
-
-#pages:
-#  stage: deploy
-#  dependencies:
-#    - build-job
-#
-#  script:
-#    - echo "Deploying to GitLab Pages"
-#
-#  artifacts:
-#    paths:
-#      - public/    
+# ------------------------------------------------------------------------------
+# Optional: GitLab Pages Deployment
+# ------------------------------------------------------------------------------
+pages:
+  stage: deploy
+  dependencies:
+    - build-job
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+  script:
+    - echo "Publishing build output to GitLab Pages..."
+  artifacts:
+    paths:
+      - public/

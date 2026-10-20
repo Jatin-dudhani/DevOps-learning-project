@@ -1,0 +1,22 @@
+# Git metadata
+.git
+.gitignore
+
+# CI/CD and Documentation
+.gitlab-ci.yml
+README.md
+images/
+scripts/
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Secrets & Local credentials
+*.pem
+*.key
+id_rsa*
+.env*
+
+# Logs
+*.log

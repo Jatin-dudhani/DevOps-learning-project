@@ -1,0 +1,25 @@
+{
+  "status": "success",
+  "clusterContext": "arn:aws:eks:us-east-1:prod-eks-cluster-01",
+  "version": "v1.29.3-eks",
+  "nodes": {
+    "total": 6,
+    "ready": 6,
+    "notReady": 0
+  },
+  "pods": {
+    "total": 29,
+    "running": 28,
+    "warning": 1
+  },
+  "allocations": {
+    "cpu": "68%",
+    "memory": "74%"
+  },
+  "namespaces": [
+    "production",
+    "ingress-nginx",
+    "monitoring",
+    "kube-system"
+  ]
+}

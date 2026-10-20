@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevOps Learning Platform &bull; Firebase Cloud API Backend</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-page: #090a0f;
+            --bg-card: #12141c;
+            --border: #1e2230;
+            --accent: #3b82f6;
+            --success: #10b981;
+            --text-primary: #f8fafc;
+            --text-muted: #94a3b8;
+            --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: var(--bg-page);
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            padding: 2rem 1.5rem;
+            line-height: 1.6;
+        }
+        .container { max-width: 960px; margin: 0 auto; }
+        header {
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 1.5rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .brand { display: flex; align-items: center; gap: 0.75rem; }
+        .brand-icon {
+            width: 42px; height: 42px; background: rgba(59, 130, 246, 0.15);
+            border: 1px solid var(--accent); border-radius: 10px;
+            display: flex; align-items: center; justify-content: center; font-size: 1.4rem;
+        }
+        h1 { font-size: 1.4rem; font-weight: 800; }
+        .sub { font-size: 0.85rem; color: var(--text-muted); }
+        .status-badge {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            background: rgba(16, 185, 129, 0.15); border: 1px solid var(--success);
+            color: var(--success); padding: 0.35rem 0.75rem; border-radius: 9999px;
+            font-size: 0.78rem; font-weight: 700;
+        }
+        .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); box-shadow: 0 0 8px var(--success); }
+        .intro-card {
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: 12px; padding: 1.25rem 1.5rem; margin-bottom: 2rem;
+        }
+        .grid { display: flex; flex-direction: column; gap: 1rem; }
+        .endpoint-card {
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: 12px; padding: 1.25rem; transition: border-color 0.2s;
+        }
+        .endpoint-card:hover { border-color: var(--accent); }
+        .endpoint-header {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.5rem;
+        }
+        .method-path { display: flex; align-items: center; gap: 0.75rem; }
+        .method {
+            font-family: var(--font-mono); font-size: 0.72rem; font-weight: 800;
+            padding: 0.2rem 0.5rem; border-radius: 4px;
+        }
+        .method.get { background: rgba(16, 185, 129, 0.18); color: #10b981; }
+        .method.post { background: rgba(59, 130, 246, 0.18); color: #60a5fa; }
+        .path { font-family: var(--font-mono); font-size: 0.95rem; font-weight: 600; color: #fff; }
+        .btn-test {
+            background: rgba(59, 130, 246, 0.15); border: 1px solid var(--accent);
+            color: #fff; padding: 0.3rem 0.75rem; border-radius: 6px; font-size: 0.75rem;
+            font-weight: 600; text-decoration: none; cursor: pointer; transition: all 0.2s;
+        }
+        .btn-test:hover { background: var(--accent); }
+        .desc { font-size: 0.84rem; color: var(--text-muted); margin-bottom: 0.75rem; }
+        pre {
+            background: #06070a; border: 1px solid #161a26; border-radius: 8px;
+            padding: 0.75rem 1rem; font-family: var(--font-mono); font-size: 0.76rem;
+            color: #94a3b8; overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="brand">
+                <div class="brand-icon">🔥</div>
+                <div>
+                    <h1>Firebase Cloud API Backend</h1>
+                    <div class="sub">DevOps Learning Platform &bull; Production API Gateway</div>
+                </div>
+            </div>
+            <div class="status-badge">
+                <span class="status-dot"></span>
+                <span>Firebase Hosting Active &bull; 99.995% SLA</span>
+            </div>
+        </header>
+
+        <div class="intro-card">
+            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.5rem;">
+                This backend service hosts the live REST APIs for the <strong>DevOps Learning Platform</strong> deployed on Firebase. Full CORS is enabled for cross-origin integration with the Vercel-hosted frontend.
+            </p>
+            <p style="font-size: 0.8rem; color: #64748b;">
+                <strong>Project ID:</strong> <code>devops-platform-8f40a</code> &bull; <strong>Default Region:</strong> <code>us-central1</code> &bull; <strong>CORS:</strong> <code>*</code>
+            </p>
+        </div>
+
+        <div class="grid">
+            <!-- 1. Health -->
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <div class="method-path">
+                        <span class="method get">GET</span>
+                        <span class="path">/api/health</span>
+                    </div>
+                    <a href="/api/health" class="btn-test" target="_blank">Test Endpoint &rarr;</a>
+                </div>
+                <div class="desc">System healthcheck &amp; 90-day SLA status reporting across 6 cloud components.</div>
+            </div>
+
+            <!-- 2. Telemetry -->
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <div class="method-path">
+                        <span class="method get">GET</span>
+                        <span class="path">/api/telemetry</span>
+                    </div>
+                    <a href="/api/telemetry" class="btn-test" target="_blank">Test Endpoint &rarr;</a>
+                </div>
+                <div class="desc">Client network telemetry, edge latency measurement, and cloud region context.</div>
+            </div>
+
+            <!-- 3. SecOps -->
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <div class="method-path">
+                        <span class="method get">GET</span>
+                        <span class="path">/api/secops/scan</span>
+                    </div>
+                    <a href="/api/secops/scan" class="btn-test" target="_blank">Test Endpoint &rarr;</a>
+                </div>
+                <div class="desc">DevSecOps CVE vulnerability feed proxy with OSV.dev CVSS scoring.</div>
+            </div>
+
+            <!-- 4. Network DNS -->
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <div class="method-path">
+                        <span class="method get">GET</span>
+                        <span class="path">/api/network/dns</span>
+                    </div>
+                    <a href="/api/network/dns" class="btn-test" target="_blank">Test Endpoint &rarr;</a>
+                </div>
+                <div class="desc">Google DNS-over-HTTPS (DoH) resolution proxy for A, AAAA, TXT, and MX records.</div>
+            </div>
+
+            <!-- 5. K8s Cluster -->
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <div class="method-path">
+                        <span class="method get">GET</span>
+                        <span class="path">/api/k8s/cluster</span>
+                    </div>
+                    <a href="/api/k8s/cluster" class="btn-test" target="_blank">Test Endpoint &rarr;</a>
+                </div>
+                <div class="desc">Kubernetes cluster node status, pods list, restart counts, and CPU/RAM allocation.</div>
+            </div>
+
+            <!-- 6. SRE Incidents -->
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <div class="method-path">
+                        <span class="method get">GET</span>
+                        <span class="path">/api/sre/incidents</span>
+                    </div>
+                    <a href="/api/sre/incidents" class="btn-test" target="_blank">Test Endpoint &rarr;</a>
+                </div>
+                <div class="desc">SRE outage drills, Golden Signals telemetry, and automated remediation playbooks.</div>
+            </div>
+
+            <!-- 7. FinOps Cost -->
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <div class="method-path">
+                        <span class="method get">GET</span>
+                        <span class="path">/api/finops/cost</span>
+                    </div>
+                    <a href="/api/finops/cost" class="btn-test" target="_blank">Test Endpoint &rarr;</a>
+                </div>
+                <div class="desc">Multi-cloud infrastructure pricing rules, ARM64 Graviton models, and savings plans.</div>
+            </div>
+
+            <!-- 8. Compliance & SBOM -->
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <div class="method-path">
+                        <span class="method get">GET</span>
+                        <span class="path">/api/compliance/audit</span>
+                    </div>
+                    <a href="/api/compliance/audit" class="btn-test" target="_blank">Test Endpoint &rarr;</a>
+                </div>
+                <div class="desc">SOC 2 Type II trust controls matrix and CycloneDX / SPDX SBOM JSON manifests.</div>
+            </div>
+
+            <!-- 9. AI Copilot -->
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <div class="method-path">
+                        <span class="method get">GET</span>
+                        <span class="path">/api/ai/copilot</span>
+                    </div>
+                    <a href="/api/ai/copilot" class="btn-test" target="_blank">Test Endpoint &rarr;</a>
+                </div>
+                <div class="desc">DevOps architectural reasoning engine and Google Gemini 1.5 Flash client connector.</div>
+            </div>
+        </div>
+
+        <footer style="margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border); font-size: 0.78rem; color: var(--text-muted); text-align: center;">
+            &copy; 2026 Jatin Dudhani &bull; DevOps Learning Platform Firebase Backend &bull; Hosted on Google Cloud
+        </footer>
+    </div>
+</body>
+</html>

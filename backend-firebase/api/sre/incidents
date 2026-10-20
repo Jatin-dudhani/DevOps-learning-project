@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "activeDrills": [
+    {
+      "id": "INC-4091",
+      "severity": "CRITICAL P1",
+      "title": "Pod OOMKilled CrashLoop (Checkout API)",
+      "target": "production/checkout-api-7b8f9",
+      "remediation": "kubectl patch deployment checkout-api --patch '{\"spec\":{\"template\":{\"spec\":{\"containers\":[{\"name\":\"api\",\"resources\":{\"limits\":{\"memory\":\"1024Mi\"}}}]}}}}'"
+    },
+    {
+      "id": "INC-3882",
+      "severity": "MAJOR P2",
+      "title": "Nginx Upstream 502 Bad Gateway (Worker Timeout)",
+      "target": "ingress-nginx/upstream-gunicorn",
+      "remediation": "systemctl reload nginx && supervisorctl restart gunicorn_workers:*"
+    },
+    {
+      "id": "INC-5104",
+      "severity": "CRITICAL P1",
+      "title": "Expired Ingress TLS Certificate",
+      "target": "edge-ingress/*.production.domain.com",
+      "remediation": "cert-manager renew --all -n production"
+    },
+    {
+      "id": "INC-6219",
+      "severity": "HIGH P2",
+      "title": "Layer 7 HTTP DDoS Flood (85,000 RPS)",
+      "target": "cloudflare-waf//api/v1/auth",
+      "remediation": "cloudflare-cli rules update --under-attack-mode=on"
+    }
+  ]
+}

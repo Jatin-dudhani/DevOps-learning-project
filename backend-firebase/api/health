@@ -1,0 +1,41 @@
+{
+  "status": "operational",
+  "service": "DevOps Learning Platform Backend",
+  "provider": "Firebase Cloud Hosting",
+  "projectId": "devops-platform-8f40a",
+  "version": "3.2.0",
+  "uptime": "99.995%",
+  "timestamp": "2026-10-20T21:00:00Z",
+  "components": [
+    {
+      "name": "Cloudflare Edge Anycast CDN",
+      "latency": "12ms",
+      "status": "Operational"
+    },
+    {
+      "name": "AWS Ingress Application Load Balancer",
+      "latency": "18ms",
+      "status": "Operational"
+    },
+    {
+      "name": "EKS Production Kubernetes Cluster (1.29)",
+      "latency": "24ms",
+      "status": "Operational"
+    },
+    {
+      "name": "Amazon Aurora PostgreSQL Multi-AZ Primary",
+      "latency": "4ms",
+      "status": "Operational"
+    },
+    {
+      "name": "Redis Enterprise Session Cache",
+      "latency": "0.8ms",
+      "status": "Operational"
+    },
+    {
+      "name": "OSV.dev Vulnerability Feeds & DoH Resolver",
+      "latency": "98ms",
+      "status": "Operational"
+    }
+  ]
+}

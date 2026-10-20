@@ -1,0 +1,24 @@
+{
+  "version": 2,
+  "name": "devops-learning-platform",
+  "cleanUrls": true,
+  "buildCommand": "bash scripts/build.sh",
+  "outputDirectory": "public",
+  "rewrites": [
+    {
+      "source": "/api/firebase/:path*",
+      "destination": "https://devops-platform-8f40a.web.app/api/:path*"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
+        { "key": "X-XSS-Protection", "value": "1; mode=block" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
+      ]
+    }
+  ]
+}

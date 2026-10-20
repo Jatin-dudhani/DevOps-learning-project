@@ -1,0 +1,17 @@
+{
+  "status": "success",
+  "providers": [
+    "AWS",
+    "GCP",
+    "Azure"
+  ],
+  "pricingModels": {
+    "arm64Discount": 0.2,
+    "savings1yrDiscount": 0.38,
+    "savings3yrDiscount": 0.58,
+    "spotDiscount": 0.72,
+    "ebsStoragePerGb": 0.08,
+    "egressPerGb": 0.09,
+    "k8sClusterFee": 73.0
+  }
+}

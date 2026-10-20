@@ -1,51 +1,2895 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GitLab Learning Hub</title>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>DevOps Learning Platform | Interactive Script Analyzer, AI Copilot, CI/CD &amp; Live APIs</title>
+    <meta name="description" content="An interactive, hands-on DevOps learning platform for beginner to intermediate engineers. Analyze custom bash scripts, get guidance from an AI DevOps mentor, run commands in an interactive terminal sandbox, scan live CVEs via OSV, resolve DNS-over-HTTPS, and simulate CI/CD pipelines.">
+    <meta name="theme-color" content="#090a0f">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- Top Announcement & Live Client Network Telemetry Bar (Real API Integration) -->
+    <aside class="telemetry-bar" aria-label="Live System & Network Telemetry">
+        <div class="telemetry-inner">
+            <button type="button" id="openStatusModalBtn" class="telemetry-item telemetry-status-btn" title="View Real-Time System Status &amp; Uptime History">
+                <span class="status-pulse-dot" aria-hidden="true"></span>
+                <span class="telemetry-label">Status:</span>
+                <span class="telemetry-val" style="color:var(--color-success);">99.995% Uptime</span>
+            </button>
+            <div class="telemetry-divider"></div>
+            <div class="telemetry-item">
+                <span class="telemetry-label">Pipeline:</span>
+                <span class="telemetry-val" id="telemetryPipelineStatus">Operational (v3.2)</span>
+            </div>
+            <div class="telemetry-divider"></div>
+            <div class="telemetry-item">
+                <span class="telemetry-label">Client IP:</span>
+                <span class="telemetry-val" id="telemetryClientIp">Detecting...</span>
+            </div>
+            <div class="telemetry-divider"></div>
+            <div class="telemetry-item">
+                <span class="telemetry-label">Latency:</span>
+                <span class="telemetry-val" id="telemetryLatency">-- ms</span>
+            </div>
+            <div class="telemetry-divider"></div>
+            <div class="telemetry-item">
+                <span class="telemetry-label">AI Engine:</span>
+                <span class="telemetry-val" id="telemetryAiStatus" style="color:var(--color-success);">Online (Active)</span>
+            </div>
+            <div class="telemetry-divider"></div>
+            <div class="telemetry-item">
+                <span class="telemetry-label">SOC 2 / CIS:</span>
+                <span class="telemetry-badge-green">Verified A+</span>
+            </div>
+        </div>
+    </aside>
 
-    <header>
-        <h1>GitLab Learning Hub</h1>
-        <p>Learning CI/CD one pipeline at a time.</p>
+    <!-- Main Navigation Bar -->
+    <header class="site-header">
+        <div class="header-container">
+            <a href="#" class="brand-link" aria-label="DevOps Learning Platform Home">
+                <div class="brand-icon" aria-hidden="true">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M3 12h3m12 0h3M12 3v3m0 12v3"></path>
+                        <path d="m4.93 4.93 2.12 2.12m9.9 9.9 2.12 2.12M4.93 19.07l2.12-2.12m9.9-9.9 2.12-2.12"></path>
+                    </svg>
+                </div>
+                <div class="brand-text">
+                    <span class="brand-title">DevOps Learning Platform</span>
+                    <span class="brand-subtitle">Enterprise Cloud Automation &bull; SRE Suite &bull; AI Mentor</span>
+                </div>
+            </a>
+
+            <nav class="desktop-nav" id="mainNavigation" aria-label="Main Navigation">
+                <a href="#hub" class="nav-link active" data-page="page-hub">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                    <span>Hub</span>
+                </a>
+                <a href="#generator" class="nav-link" data-page="page-generator">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+                    <span>Auto-DevOps</span>
+                </a>
+                <a href="#topology" class="nav-link" data-page="page-topology">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="3"></circle><circle cx="6" cy="19" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                    <span>Topology</span>
+                </a>
+                <a href="#observability" class="nav-link" data-page="page-observability">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                    <span>Observability</span>
+                </a>
+                <a href="#finops" class="nav-link" data-page="page-finops">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                    <span>FinOps Cost</span>
+                </a>
+                <a href="#k8s" class="nav-link" data-page="page-k8s">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polygon points="12 8 8 12 12 16 16 12 12 8"></polygon></svg>
+                    <span>K8s Engine</span>
+                </a>
+                <a href="#compliance" class="nav-link" data-page="page-compliance">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg>
+                    <span>Compliance &amp; SBOM</span>
+                </a>
+                <a href="#inspector" class="nav-link" data-page="page-inspector">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                    <span>Inspector</span>
+                </a>
+                <a href="#ai" class="nav-link" data-page="page-ai">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                    <span>AI Copilot</span>
+                </a>
+                <a href="#terminal" class="nav-link" data-page="page-terminal">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                    <span>Sandbox &amp; CI</span>
+                </a>
+                <a href="#network" class="nav-link" data-page="page-network">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                    <span>Network Lab</span>
+                </a>
+                <a href="#academy" class="nav-link" data-page="page-academy">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
+                    <span>Academy</span>
+                </a>
+            </nav>
+
+            <div class="header-actions">
+                <button type="button" id="openCommandPaletteBtn" class="cmd-palette-btn" aria-label="Open Command Palette" title="Command Palette (⌘K / Ctrl+K)">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <span class="cmd-palette-text">Search</span>
+                    <kbd class="cmd-palette-kbd">⌘K</kbd>
+                </button>
+
+                <div class="env-switcher-wrap" title="Active Cloud Region &amp; Cluster Environment">
+                    <select id="globalEnvSwitcher" class="env-select" aria-label="Target Environment">
+                        <option value="prod" selected>prod (us-east-1)</option>
+                        <option value="staging">stage (eu-central-1)</option>
+                        <option value="dev">sandbox (local)</option>
+                    </select>
+                </div>
+
+                <button id="themeToggleBtn" class="theme-toggle-btn" aria-label="Toggle dark/light theme" title="Toggle Theme">
+                    <svg class="sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <svg class="moon-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </button>
+
+                <a href="https://github.com/Jatin-dudhani/DevOps-learning-project" target="_blank" rel="noopener noreferrer" class="btn-secondary btn-sm" aria-label="View Project on GitHub">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"></path>
+                    </svg>
+                    <span>GitHub</span>
+                </a>
+            </div>
+        </div>
     </header>
 
-    <main>
-        <section class="card">
-            <h2>What is GitLab?</h2>
-            <p>
-                GitLab is a DevOps platform that provides Git repositories,
-                CI/CD pipelines, issue tracking, and deployment tools.
-            </p>
+        <main class="page-main">
+        <!-- PAGE 1: OVERVIEW & FEATURE MENU HUB -->
+        <div id="page-hub" class="feature-page active">
+<!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-glow-layer" aria-hidden="true"></div>
+            <div class="hero-content">
+                <div class="hero-pill">
+                    <span class="hero-pill-badge">DevOps &amp; Cloud Native</span>
+                    <span class="hero-pill-text">Zero Hardcoding &bull; Connected to Real-World APIs &bull; AI Powered</span>
+                </div>
+
+                <h1 class="hero-title">
+                    Build, Audit &amp; Master DevOps with <span class="text-gradient">Interactive Tools &amp; AI</span>.
+                </h1>
+
+                <p class="hero-description">
+                    Paste your own bash scripts or Dockerfiles for real-time security auditing, chat with the built-in DevOps AI Mentor, execute commands in an interactive Linux sandbox, scan live CVEs via OSV, resolve DNS-over-HTTPS, and simulate CI/CD edge-case failures.
+                </p>
+
+                                <div class="hero-action-group">
+                    <a href="#generator" class="btn-primary" data-page="page-generator" data-section="project-generator">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                            <polyline points="2 17 12 22 22 17"></polyline>
+                            <polyline points="2 12 12 17 22 12"></polyline>
+                        </svg>
+                        <span>Auto-DevOps Generator</span>
+                    </a>
+                    <a href="#inspector" class="btn-secondary" data-page="page-inspector" data-section="analyzer">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="4 17 10 11 4 5"></polyline>
+                            <line x1="12" y1="19" x2="20" y2="19"></line>
+                        </svg>
+                        <span>Analyze Your Script</span>
+                    </a>
+                    <a href="#ai" class="btn-secondary" data-page="page-ai" data-section="ai-assistant">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                        <span>DevOps AI</span>
+                    </a>
+                    <a href="#terminal" class="btn-secondary" data-page="page-terminal" data-section="terminal-sandbox">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                            <line x1="8" y1="21" x2="16" y2="21"></line>
+                            <line x1="12" y1="17" x2="12" y2="21"></line>
+                        </svg>
+                        <span>CLI Sandbox</span>
+                    </a>
+                </div>
+
+                <!-- Live Metrics Card Grid -->
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-icon-box">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                        </div>
+                        <div class="metric-meta">
+                            <span class="metric-val">Script Auditor</span>
+                            <span class="metric-label">Bash, Docker &amp; CI Linting</span>
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-icon-box">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                            </svg>
+                        </div>
+                        <div class="metric-meta">
+                            <span class="metric-val">DevOps AI Copilot</span>
+                            <span class="metric-label">Architecture &amp; Debugging</span>
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-icon-box">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                            </svg>
+                        </div>
+                        <div class="metric-meta">
+                            <span class="metric-val">Live OSV API</span>
+                            <span class="metric-label">Real CVE Vulnerabilities</span>
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-icon-box">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="2" y1="12" x2="22" y2="12"></line>
+                                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                            </svg>
+                        </div>
+                        <div class="metric-meta">
+                            <span class="metric-val">Google DoH</span>
+                            <span class="metric-label">Live DNS-over-HTTPS</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
 
-        <section class="card">
-            <h2>Pipeline Status</h2>
-            <button onclick="showMessage()">
-                Run Demo Check
-            </button>
+        <!-- FEATURE MENU SHOWCASE (Symmetrical Hub Workspace Cards) -->
+        <section class="feature-menu-section" id="feature-menu-hub">
+            <div class="section-header text-center">
+                <div class="section-tag">Interactive Feature Suite</div>
+                <h2 class="section-title">Specialized DevOps Workspaces</h2>
+                <p class="section-desc">
+                    Navigate through dedicated interactive pages designed to build your cloud engineering capabilities from foundational Linux administration to production orchestration.
+                </p>
+            </div>
 
-            <p id="result"></p>
+            <div class="feature-menu-grid">
+                <!-- Card 0 (Featured Premier): Auto-DevOps Generator -->
+                <div class="feature-menu-card" data-page="page-generator" data-section="project-generator" style="--card-index: 0;">
+                    <div class="card-ambient-glow" aria-hidden="true"></div>
+                    <div class="card-top-row">
+                        <div class="card-icon-box">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+                        </div>
+                        <span class="card-badge badge-blue">Auto-DevOps</span>
+                    </div>
+                    <h3 class="card-title">Project Auto-DevOps Generator</h3>
+                    <p class="card-desc">Paste your package.json, requirements.txt, or repo code. Automatically generates production Dockerfiles, CI/CD pipelines, K8s manifests, Compose, and deploy scripts.</p>
+                    <div class="card-tags">
+                        <span class="card-tag">Stack Detection</span>
+                        <span class="card-tag">Multi-Stage Docker</span>
+                        <span class="card-tag">K8s &amp; CI/CD</span>
+                    </div>
+                    <div class="card-footer-action">
+                        <span class="card-action-text">Launch Generator Studio</span>
+                        <span class="card-action-arrow">&rarr;</span>
+                    </div>
+                </div>
+
+                <!-- Card 1 -->
+                <div class="feature-menu-card" data-page="page-inspector" data-section="analyzer" style="--card-index: 1;">
+                    <div class="card-ambient-glow" aria-hidden="true"></div>
+                    <div class="card-top-row">
+                        <div class="card-icon-box">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                        </div>
+                        <span class="card-badge badge-blue">Security SAST</span>
+                    </div>
+                    <h3 class="card-title">Script &amp; Config Inspector</h3>
+                    <p class="card-desc">Paste custom Bash scripts, Dockerfiles, or CI pipelines to detect vulnerabilities, unquoted variables, and race conditions, with one-click auto-hardening.</p>
+                    <div class="card-tags">
+                        <span class="card-tag">Bash Linter</span>
+                        <span class="card-tag">Auto-Harden</span>
+                        <span class="card-tag">Dockerfile Audit</span>
+                    </div>
+                    <div class="card-footer-action">
+                        <span class="card-action-text">Launch Inspector</span>
+                        <span class="card-action-arrow">&rarr;</span>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="feature-menu-card" data-page="page-ai" data-section="ai-assistant" style="--card-index: 1;">
+                    <div class="card-ambient-glow" aria-hidden="true"></div>
+                    <div class="card-top-row">
+                        <div class="card-icon-box">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                        </div>
+                        <span class="card-badge badge-purple">AI Mentor</span>
+                    </div>
+                    <h3 class="card-title">DevOps AI Copilot</h3>
+                    <p class="card-desc">Consult a specialized DevOps intelligence engine for code audits, Nginx 502 triage, umask 077 explanations, or connect live Google Gemini 1.5 Flash.</p>
+                    <div class="card-tags">
+                        <span class="card-tag">Offline Engine</span>
+                        <span class="card-tag">Google Gemini</span>
+                        <span class="card-tag">Incident Triage</span>
+                    </div>
+                    <div class="card-footer-action">
+                        <span class="card-action-text">Chat with AI</span>
+                        <span class="card-action-arrow">&rarr;</span>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="feature-menu-card" data-page="page-terminal" data-section="terminal-sandbox" style="--card-index: 2;">
+                    <div class="card-ambient-glow" aria-hidden="true"></div>
+                    <div class="card-top-row">
+                        <div class="card-icon-box">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                        </div>
+                        <span class="card-badge badge-green">Linux Shell</span>
+                    </div>
+                    <h3 class="card-title">CLI Terminal Sandbox</h3>
+                    <p class="card-desc">Interactive browser-based Linux command shell. Practice running docker ps, testing umask 077 permissions, verifying nginx -t, and checking git status.</p>
+                    <div class="card-tags">
+                        <span class="card-tag">Command History</span>
+                        <span class="card-tag">Docker CLI</span>
+                        <span class="card-tag">POSIX Modes</span>
+                    </div>
+                    <div class="card-footer-action">
+                        <span class="card-action-text">Open Terminal</span>
+                        <span class="card-action-arrow">&rarr;</span>
+                    </div>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="feature-menu-card" data-page="page-terminal" data-section="simulator" style="--card-index: 3;">
+                    <div class="card-ambient-glow" aria-hidden="true"></div>
+                    <div class="card-top-row">
+                        <div class="card-icon-box">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                        </div>
+                        <span class="card-badge badge-amber">CI/CD Engine</span>
+                    </div>
+                    <h3 class="card-title">Production CI/CD Simulator</h3>
+                    <p class="card-desc">Experience 5 sequential pipeline stages with real-time logs and 5 simulated edge-case failures including secret leaks, 401s, and SSH timeouts.</p>
+                    <div class="card-tags">
+                        <span class="card-tag">5 Stages</span>
+                        <span class="card-tag">Failure Modes</span>
+                        <span class="card-tag">Root-Cause Analysis</span>
+                    </div>
+                    <div class="card-footer-action">
+                        <span class="card-action-text">Run Simulation</span>
+                        <span class="card-action-arrow">&rarr;</span>
+                    </div>
+                </div>
+
+                <!-- Card 5 -->
+                <div class="feature-menu-card" data-page="page-inspector" data-section="secops" style="--card-index: 4;">
+                    <div class="card-ambient-glow" aria-hidden="true"></div>
+                    <div class="card-top-row">
+                        <div class="card-icon-box">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                        </div>
+                        <span class="card-badge badge-blue">Live API</span>
+                    </div>
+                    <h3 class="card-title">DevSecOps CVE Scanner</h3>
+                    <p class="card-desc">Query live software vulnerabilities via the real OSV.dev API across Alpine, Debian, npm, PyPI, and Go packages with real CVSS severity scoring.</p>
+                    <div class="card-tags">
+                        <span class="card-tag">OSV.dev API</span>
+                        <span class="card-tag">CVSS Scores</span>
+                        <span class="card-tag">Supply Chain</span>
+                    </div>
+                    <div class="card-footer-action">
+                        <span class="card-action-text">Scan Packages</span>
+                        <span class="card-action-arrow">&rarr;</span>
+                    </div>
+                </div>
+
+                <!-- Card 6 -->
+                <div class="feature-menu-card" data-page="page-network" data-section="network" style="--card-index: 5;">
+                    <div class="card-ambient-glow" aria-hidden="true"></div>
+                    <div class="card-top-row">
+                        <div class="card-icon-box">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                        </div>
+                        <span class="card-badge badge-purple">Networking</span>
+                    </div>
+                    <h3 class="card-title">DNS-over-HTTPS &amp; VPC CIDR</h3>
+                    <p class="card-desc">Execute live Google DNS-over-HTTPS lookups (A, AAAA, TXT, MX) and calculate usable IP addresses and reserved ranges for AWS VPC CIDR subnets.</p>
+                    <div class="card-tags">
+                        <span class="card-tag">Google DoH</span>
+                        <span class="card-tag">AWS VPC Subnets</span>
+                        <span class="card-tag">CIDR Math</span>
+                    </div>
+                    <div class="card-footer-action">
+                        <span class="card-action-text">Open Network Lab</span>
+                        <span class="card-action-arrow">&rarr;</span>
+                    </div>
+                </div>
+
+                <!-- Card 7 -->
+                <div class="feature-menu-card" data-page="page-network" data-section="docker-studio" style="--card-index: 6;">
+                    <div class="card-ambient-glow" aria-hidden="true"></div>
+                    <div class="card-top-row">
+                        <div class="card-icon-box">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                        </div>
+                        <span class="card-badge badge-green">Containers &amp; Git</span>
+                    </div>
+                    <h3 class="card-title">Docker Studio &amp; Git Feeds</h3>
+                    <p class="card-desc">Generate CIS-hardened Dockerfiles and docker-compose stacks, fetch canonical GitLab CI templates, and inspect live GitHub repositories.</p>
+                    <div class="card-tags">
+                        <span class="card-tag">Docker Compose</span>
+                        <span class="card-tag">GitLab Templates</span>
+                        <span class="card-tag">GitHub API</span>
+                    </div>
+                    <div class="card-footer-action">
+                        <span class="card-action-text">Explore Containers</span>
+                        <span class="card-action-arrow">&rarr;</span>
+                    </div>
+                </div>
+
+                <!-- Card 8 -->
+                <div class="feature-menu-card" data-page="page-academy" data-section="academy" style="--card-index: 7;">
+                    <div class="card-ambient-glow" aria-hidden="true"></div>
+                    <div class="card-top-row">
+                        <div class="card-icon-box">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
+                        </div>
+                        <span class="card-badge badge-amber">Academy &amp; SRE</span>
+                    </div>
+                    <h3 class="card-title">Curriculum, Incidents &amp; Quiz</h3>
+                    <p class="card-desc">6 structured learning modules from beginner to intermediate, real production outage triage scenarios (502, disk full), and interactive quiz testing.</p>
+                    <div class="card-tags">
+                        <span class="card-tag">6 Modules</span>
+                        <span class="card-tag">Incident Lab</span>
+                        <span class="card-tag">Skill Quiz</span>
+                    </div>
+                    <div class="card-footer-action">
+                        <span class="card-action-text">Enter Academy</span>
+                        <span class="card-action-arrow">&rarr;</span>
+                    </div>
+                </div>
+
+                <!-- Card 9: Live Cloud Topology Visualizer -->
+                <div class="feature-menu-card" data-page="page-topology" data-section="cloud-topology" style="--card-index: 8;">
+                    <div class="card-ambient-glow" aria-hidden="true"></div>
+                    <div class="card-top-row">
+                        <div class="card-icon-box">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="3"></circle><circle cx="6" cy="19" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                        </div>
+                        <span class="card-badge badge-blue">Interactive Mesh</span>
+                    </div>
+                    <h3 class="card-title">Live Cloud Architecture Topology</h3>
+                    <p class="card-desc">Interactive SVG node canvas with real-time packet pulses, multi-region failover simulator, chaos engineering drills, and live Kubernetes node manifest inspection.</p>
+                    <div class="card-tags">
+                        <span class="card-tag">Animated SVG</span>
+                        <span class="card-tag">Chaos Drills</span>
+                        <span class="card-tag">Failover Routing</span>
+                    </div>
+                    <div class="card-footer-action">
+                        <span class="card-action-text">Launch Topology Canvas</span>
+                        <span class="card-action-arrow">&rarr;</span>
+                    </div>
+                </div>
+
+                <!-- Card 10: SRE War Room & Observability Suite -->
+                <div class="feature-menu-card" data-page="page-observability" data-section="sre-war-room" style="--card-index: 9;">
+                    <div class="card-ambient-glow" aria-hidden="true"></div>
+                    <div class="card-top-row">
+                        <div class="card-icon-box">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                        </div>
+                        <span class="card-badge badge-amber">SRE Incident Lab</span>
+                    </div>
+                    <h3 class="card-title">SRE Incident War Room &amp; Telemetry</h3>
+                    <p class="card-desc">Live Golden Signals telemetry (Throughput, P99 Latency, Error Rate, SLO), container log streaming, 4 outage drills (OOMKilled, 502, TLS, DDoS), and automated RCA Post-Mortem generator.</p>
+                    <div class="card-tags">
+                        <span class="card-tag">Golden Signals</span>
+                        <span class="card-tag">Live Log Stream</span>
+                        <span class="card-tag">Post-Mortem RCA</span>
+                    </div>
+                    <div class="card-footer-action">
+                        <span class="card-action-text">Enter War Room</span>
+                        <span class="card-action-arrow">&rarr;</span>
+                    </div>
+                </div>
+
+                <!-- Card 11: FinOps Cloud Cost Estimator -->
+                <div class="feature-menu-card" data-page="page-finops" data-section="finops-calculator" style="--card-index: 10;">
+                    <div class="card-ambient-glow" aria-hidden="true"></div>
+                    <div class="card-top-row">
+                        <div class="card-icon-box">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                        </div>
+                        <span class="card-badge badge-green">FinOps &amp; Infracost</span>
+                    </div>
+                    <h3 class="card-title">FinOps Cloud Cost &amp; Infracost</h3>
+                    <p class="card-desc">Accurately calculate multi-cloud infrastructure spending across AWS, GCP, and Azure. Compare ARM64 Graviton vs x86, model Spot savings, and run 1-click FinOps optimization audits.</p>
+                    <div class="card-tags">
+                        <span class="card-tag">AWS / GCP / Azure</span>
+                        <span class="card-tag">Graviton ARM64</span>
+                        <span class="card-tag">1-Click Savings</span>
+                    </div>
+                    <div class="card-footer-action">
+                        <span class="card-action-text">Calculate Cloud Costs</span>
+                        <span class="card-action-arrow">&rarr;</span>
+                    </div>
+                </div>
+
+                <!-- Card 12: Kubernetes Cluster & Pod Inspector -->
+                <div class="feature-menu-card" data-page="page-k8s" data-section="k8s-inspector" style="--card-index: 11;">
+                    <div class="card-ambient-glow" aria-hidden="true"></div>
+                    <div class="card-top-row">
+                        <div class="card-icon-box">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polygon points="12 8 8 12 12 16 16 12 12 8"></polygon></svg>
+                        </div>
+                        <span class="card-badge badge-purple">K8s Orchestration</span>
+                    </div>
+                    <h3 class="card-title">Kubernetes Cluster &amp; Pod Lens</h3>
+                    <p class="card-desc">Enterprise K9s and Lens style workload console. Filter namespaces, inspect pod health and restart loops, stream container logs, view YAML manifests, and autoscale deployment replicas.</p>
+                    <div class="card-tags">
+                        <span class="card-tag">K9s / Lens Console</span>
+                        <span class="card-tag">Pod Log Tailing</span>
+                        <span class="card-tag">Replica Autoscaler</span>
+                    </div>
+                    <div class="card-footer-action">
+                        <span class="card-action-text">Inspect K8s Cluster</span>
+                        <span class="card-action-arrow">&rarr;</span>
+                    </div>
+                </div>
+
+                <!-- Card 13: SOC 2 & SBOM Security Compliance Suite -->
+                <div class="feature-menu-card" data-page="page-compliance" data-section="compliance-studio" style="--card-index: 12;">
+                    <div class="card-ambient-glow" aria-hidden="true"></div>
+                    <div class="card-top-row">
+                        <div class="card-icon-box">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg>
+                        </div>
+                        <span class="card-badge badge-blue">SOC 2 &amp; ISO 27001</span>
+                    </div>
+                    <h3 class="card-title">SOC 2, ISO 27001 &amp; SBOM Studio</h3>
+                    <p class="card-desc">Interactive enterprise compliance checklist with automated control auditing, cryptographic posture score, and one-click CycloneDX &amp; SPDX JSON SBOM generator.</p>
+                    <div class="card-tags">
+                        <span class="card-tag">SOC 2 Type II</span>
+                        <span class="card-tag">CycloneDX SBOM</span>
+                        <span class="card-tag">Audit Readiness</span>
+                    </div>
+                    <div class="card-footer-action">
+                        <span class="card-action-text">Run Security Audit</span>
+                        <span class="card-action-arrow">&rarr;</span>
+                    </div>
+                </div>
+            </div>
         </section>
 
-        <section class="card">
-            <h2>Learning Goals</h2>
-            <ul>
-                <li>Create Jobs</li>
-                <li>Use Stages</li>
-                <li>Upload Artifacts</li>
-                <li>Deploy with GitLab Pages</li>
-            </ul>
+<!-- SECTION 12: Architecture & System Topology -->
+        <section id="architecture" class="section-block">
+            <div class="section-header">
+                <div class="section-tag">System Topology</div>
+                <h2 class="section-title">Automated DevOps Architecture</h2>
+                <p class="section-desc">
+                    Click any node in the topology below to inspect its operational commands, input/output artifacts, security hardening mechanisms, and edge cases.
+                </p>
+            </div>
+
+            <div class="architecture-layout">
+                <!-- Interactive Flow Nodes -->
+                <div class="flow-nodes-container" id="flowNodesContainer">
+                    <button class="flow-node active" data-node="git">
+                        <div class="flow-node-badge">1. Version Control</div>
+                        <div class="flow-node-title">Git &amp; VS Code</div>
+                        <div class="flow-node-sub">Local commit &amp; branch push</div>
+                    </button>
+
+                    <div class="flow-arrow" aria-hidden="true">→</div>
+
+                    <button class="flow-node" data-node="gitlab">
+                        <div class="flow-node-badge">2. Repository &amp; CI</div>
+                        <div class="flow-node-title">GitLab CI/CD</div>
+                        <div class="flow-node-sub">Webhook trigger &amp; pipeline runner</div>
+                    </button>
+
+                    <div class="flow-arrow" aria-hidden="true">→</div>
+
+                    <button class="flow-node" data-node="docker">
+                        <div class="flow-node-badge">3. Containerization</div>
+                        <div class="flow-node-title">Docker Hub</div>
+                        <div class="flow-node-sub">Multi-stage build &amp; registry push</div>
+                    </button>
+
+                    <div class="flow-arrow" aria-hidden="true">→</div>
+
+                    <button class="flow-node" data-node="ec2">
+                        <div class="flow-node-badge">4. Cloud Infrastructure</div>
+                        <div class="flow-node-title">AWS EC2</div>
+                        <div class="flow-node-sub">Ubuntu host &amp; SSH authentication</div>
+                    </button>
+
+                    <div class="flow-arrow" aria-hidden="true">→</div>
+
+                    <button class="flow-node" data-node="nginx">
+                        <div class="flow-node-badge">5. Web Gateway</div>
+                        <div class="flow-node-title">Hardened Nginx</div>
+                        <div class="flow-node-sub">Gzip, CSP &amp; static file caching</div>
+                    </button>
+                </div>
+
+                <!-- Node Details Inspector Card -->
+                <div class="inspector-card" id="inspectorCard">
+                    <div class="inspector-header">
+                        <div class="inspector-title-wrap">
+                            <span class="inspector-pill" id="inspectorPill">Step 1</span>
+                            <h3 class="inspector-title" id="inspectorTitle">Git &amp; Local Development</h3>
+                        </div>
+                        <div class="inspector-status-badge">Hardened</div>
+                    </div>
+
+                    <p class="inspector-desc" id="inspectorDesc">
+                        Developers write code locally, test scripts using bash, and push changes to feature or main branches. Every commit creates an immutable SHA hash used throughout the pipeline for version tagging.
+                    </p>
+
+                    <div class="inspector-tabs-row">
+                        <div class="inspector-block">
+                            <span class="inspector-block-label">Execution Command:</span>
+                            <pre class="code-snippet"><code id="inspectorCommand">git add . && git commit -m "feat: modernize ui and pipeline" && git push origin main</code></pre>
+                        </div>
+
+                        <div class="inspector-block">
+                            <span class="inspector-block-label">Artifacts &amp; Inputs:</span>
+                            <div class="inspector-tags" id="inspectorArtifacts">
+                                <span class="tag">index.html</span>
+                                <span class="tag">style.css</span>
+                                <span class="tag">script.js</span>
+                                <span class="tag">.gitlab-ci.yml</span>
+                            </div>
+                        </div>
+
+                        <div class="inspector-block">
+                            <span class="inspector-block-label">Hardening &amp; Edge Cases:</span>
+                            <ul class="inspector-bullets" id="inspectorHardening">
+                                <li>Branch protection prevents unreviewed force pushes to <code>main</code>.</li>
+                                <li>Comprehensive <code>.gitignore</code> prevents credentials and OS files from entering version control.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
+        </div> <!-- /#page-hub -->
+
+        <!-- PAGE 2: AUTO-DEVOPS PROJECT GENERATOR & ARCHITECT STUDIO -->
+        <div id="page-generator" class="feature-page">
+            <div class="page-banner">
+                <span class="page-banner-tag">Workspace 01</span>
+                <h1 class="page-banner-title">Auto-DevOps Project Generator &amp; Architect Studio</h1>
+                <p class="page-banner-desc">
+                    Paste your application source code, package manifest (<code>package.json</code>, <code>requirements.txt</code>, <code>go.mod</code>, <code>pom.xml</code>, <code>Cargo.toml</code>), or directory structure. Our engine auto-detects your runtime stack and generates production-hardened Dockerfiles, multi-stage CI/CD pipelines, Kubernetes manifests, Compose topologies, and zero-downtime deployment automation.
+                </p>
+            </div>
+
+            <section id="project-generator" class="section-block">
+                <div class="generator-container">
+                    <!-- Left: Configuration & Manifest Input Pane -->
+                    <div class="generator-config-pane">
+                        <div class="generator-card-header">
+                            <div class="generator-title-wrap">
+                                <span class="generator-step-badge">Step 1</span>
+                                <h2 class="generator-pane-title">Paste Project Manifest or Code</h2>
+                            </div>
+                            <span class="generator-helper-tag">JSON &bull; Text &bull; Directory Tree</span>
+                        </div>
+
+                        <!-- Presets Bar -->
+                        <div class="generator-presets-bar">
+                            <span class="preset-label">Load Stacks:</span>
+                            <div class="preset-pill-group">
+                                <button type="button" class="preset-pill-btn active" data-stack="node">Node.js Express + Redis</button>
+                                <button type="button" class="preset-pill-btn" data-stack="python">Python FastAPI + Postgres</button>
+                                <button type="button" class="preset-pill-btn" data-stack="go">Go Fiber Microservice</button>
+                                <button type="button" class="preset-pill-btn" data-stack="java">Java Spring Boot</button>
+                                <button type="button" class="preset-pill-btn" data-stack="react">React / Vite SPA</button>
+                                <button type="button" class="preset-pill-btn btn-ghost" id="clearManifestBtn">Clear</button>
+                            </div>
+                        </div>
+
+                        <!-- Textarea for Manifest / Project Code -->
+                        <div class="generator-editor-wrap">
+                            <div class="editor-pane-header">
+                                <span class="editor-filename" id="manifestFilenameBadge">package.json</span>
+                                <div class="editor-actions">
+                                    <button type="button" id="autoDetectStackBtn" class="term-btn term-btn-accent" title="Auto-Detect Runtime Stack from Pasted Manifest">
+                                        ⚡ Auto-Detect Stack
+                                    </button>
+                                    <button type="button" id="copyManifestInputBtn" class="term-btn">Copy</button>
+                                </div>
+                            </div>
+                            <textarea id="projectManifestInput" class="code-textarea generator-textarea" spellcheck="false" placeholder="// Paste your package.json, requirements.txt, go.mod, pom.xml, or directory tree here..."></textarea>
+                        </div>
+
+                        <!-- Stack Detection Diagnostics Card -->
+                        <div class="stack-diagnostics-box" id="stackDiagnosticsBox">
+                            <div class="stack-diag-header">
+                                <span class="stack-status-dot"></span>
+                                <span class="stack-diag-title">Detected Runtime: <strong id="detectedStackName">Node.js (Express REST API)</strong></span>
+                                <span class="stack-diag-badge" id="detectedStackBadge">TypeScript / ESM</span>
+                            </div>
+                            <div class="stack-diag-details">
+                                <div class="diag-item">
+                                    <span class="diag-label">Framework:</span>
+                                    <span class="diag-val" id="diagFramework">Express 4.x + Helmet</span>
+                                </div>
+                                <div class="diag-item">
+                                    <span class="diag-label">Target Port:</span>
+                                    <span class="diag-val" id="diagPort">3000 (HTTP)</span>
+                                </div>
+                                <div class="diag-item">
+                                    <span class="diag-label">Backing Service:</span>
+                                    <span class="diag-val" id="diagDb">Redis 7 + PostgreSQL 16</span>
+                                </div>
+                                <div class="diag-item">
+                                    <span class="diag-label">Build Command:</span>
+                                    <span class="diag-val" id="diagBuild">npm run build (TSC)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Fine-Tuning Architectural Parameters -->
+                        <div class="generator-card-header mt-4">
+                            <div class="generator-title-wrap">
+                                <span class="generator-step-badge">Step 2</span>
+                                <h2 class="generator-pane-title">Fine-Tune Architecture &amp; Cloud Targets</h2>
+                            </div>
+                        </div>
+
+                        <div class="generator-form-grid">
+                            <div class="form-group">
+                                <label for="genAppName" class="form-label">Service / App Name:</label>
+                                <input type="text" id="genAppName" class="form-input" value="ecommerce-api" placeholder="e.g. inventory-service">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="genAppPort" class="form-label">Container Port:</label>
+                                <input type="number" id="genAppPort" class="form-input" value="3000" min="1" max="65535">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="genBaseImage" class="form-label">Base Image Strategy:</label>
+                                <select id="genBaseImage" class="form-select">
+                                    <option value="alpine" selected>Alpine Linux (Minimal &amp; Fast ~25MB)</option>
+                                    <option value="distroless">Google Distroless (Ultra-Secure, No Shell)</option>
+                                    <option value="slim">Debian Bookworm Slim (Standard Compatibility)</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="genDatabase" class="form-label">Backing Service / DB:</label>
+                                <select id="genDatabase" class="form-select">
+                                    <option value="redis" selected>Redis 7 (In-Memory Cache &amp; Queue)</option>
+                                    <option value="postgres">PostgreSQL 16 (Relational Database)</option>
+                                    <option value="mongodb">MongoDB 7 (Document Database)</option>
+                                    <option value="mysql">MySQL 8 (Relational Database)</option>
+                                    <option value="none">None (Stateless Service)</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="genCloudTarget" class="form-label">Target Infrastructure:</label>
+                                <select id="genCloudTarget" class="form-select">
+                                    <option value="kubernetes" selected>Kubernetes (EKS / GKE / K3s)</option>
+                                    <option value="aws_ecs">AWS ECS / Fargate &amp; ALB</option>
+                                    <option value="docker_compose">Docker Compose / Dedicated VM</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="genCiProvider" class="form-label">CI/CD Pipeline Engine:</label>
+                                <select id="genCiProvider" class="form-select">
+                                    <option value="both" selected>Both (GitHub Actions &amp; GitLab CI)</option>
+                                    <option value="github">GitHub Actions (.github/workflows)</option>
+                                    <option value="gitlab">GitLab CI/CD (.gitlab-ci.yml)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Advanced Hardening Toggles -->
+                        <div class="hardening-toggles-section">
+                            <span class="hardening-section-label">Production Hardening &amp; CIS Controls:</span>
+                            <div class="toggles-grid">
+                                <label class="toggle-checkbox-item">
+                                    <input type="checkbox" id="toggleMultiStage" checked>
+                                    <span class="toggle-box"></span>
+                                    <span class="toggle-meta">
+                                        <span class="toggle-name">Multi-Stage Docker Build</span>
+                                        <span class="toggle-desc">Layer caching, isolated build dependencies, small footprint</span>
+                                    </span>
+                                </label>
+
+                                <label class="toggle-checkbox-item">
+                                    <input type="checkbox" id="toggleNonRoot" checked>
+                                    <span class="toggle-box"></span>
+                                    <span class="toggle-meta">
+                                        <span class="toggle-name">CIS Non-Root User (UID 10001)</span>
+                                        <span class="toggle-desc">Runs container as unprivileged appuser</span>
+                                    </span>
+                                </label>
+
+                                <label class="toggle-checkbox-item">
+                                    <input type="checkbox" id="toggleHealthcheck" checked>
+                                    <span class="toggle-box"></span>
+                                    <span class="toggle-meta">
+                                        <span class="toggle-name">Container &amp; K8s Health Probes</span>
+                                        <span class="toggle-desc">Liveness &amp; Readiness probes on /healthz</span>
+                                    </span>
+                                </label>
+
+                                <label class="toggle-checkbox-item">
+                                    <input type="checkbox" id="toggleNginxProxy" checked>
+                                    <span class="toggle-box"></span>
+                                    <span class="toggle-meta">
+                                        <span class="toggle-name">Hardened Nginx Reverse Proxy</span>
+                                        <span class="toggle-desc">TLSv1.3, rate-limiting, CSP, HSTS, gzip</span>
+                                    </span>
+                                </label>
+
+                                <label class="toggle-checkbox-item">
+                                    <input type="checkbox" id="toggleK8sHpa" checked>
+                                    <span class="toggle-box"></span>
+                                    <span class="toggle-meta">
+                                        <span class="toggle-name">K8s Resource Limits &amp; HPA</span>
+                                        <span class="toggle-desc">CPU/Memory quotas + horizontal pod autoscaling 2-10</span>
+                                    </span>
+                                </label>
+
+                                <label class="toggle-checkbox-item">
+                                    <input type="checkbox" id="toggleAtomicDeploy" checked>
+                                    <span class="toggle-box"></span>
+                                    <span class="toggle-meta">
+                                        <span class="toggle-name">Atomic Bash Deploy &amp; Rollback</span>
+                                        <span class="toggle-desc">Zero-downtime symlink promotion with auto-rollback</span>
+                                    </span>
+                                </label>
+
+                                <label class="toggle-checkbox-item">
+                                    <input type="checkbox" id="toggleTerraform" checked>
+                                    <span class="toggle-box"></span>
+                                    <span class="toggle-meta">
+                                        <span class="toggle-name">Terraform AWS IaC Infrastructure</span>
+                                        <span class="toggle-desc">Complete VPC, Subnets, Security Groups &amp; ECS ALB</span>
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Generation Button -->
+                        <div class="generator-btn-wrap">
+                            <button type="button" id="generateDevOpsBtn" class="btn-primary btn-block">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                                    <polyline points="2 17 12 22 22 17"></polyline>
+                                    <polyline points="2 12 12 17 22 12"></polyline>
+                                </svg>
+                                <span>Generate Production DevOps Assets</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Right: Tabbed Artifact Studio & Verification Scorecard -->
+                    <div class="generator-output-pane">
+                        <!-- Artifact Tabs Header -->
+                        <div class="artifact-tab-bar" role="tablist" aria-label="DevOps Artifacts">
+                            <button type="button" class="artifact-tab active" data-file="dockerfile" role="tab" aria-selected="true">
+                                <span class="tab-icon">🐳</span>
+                                <span class="tab-label">Dockerfile</span>
+                            </button>
+                            <button type="button" class="artifact-tab" data-file="compose" role="tab" aria-selected="false">
+                                <span class="tab-icon">🐙</span>
+                                <span class="tab-label">docker-compose.yml</span>
+                            </button>
+                            <button type="button" class="artifact-tab" data-file="github_ci" role="tab" aria-selected="false">
+                                <span class="tab-icon">🚀</span>
+                                <span class="tab-label">deploy.yml (GitHub)</span>
+                            </button>
+                            <button type="button" class="artifact-tab" data-file="gitlab_ci" role="tab" aria-selected="false">
+                                <span class="tab-icon">🦊</span>
+                                <span class="tab-label">.gitlab-ci.yml</span>
+                            </button>
+                            <button type="button" class="artifact-tab" data-file="k8s" role="tab" aria-selected="false">
+                                <span class="tab-icon">☸️</span>
+                                <span class="tab-label">k8s-manifest.yaml</span>
+                            </button>
+                            <button type="button" class="artifact-tab" data-file="nginx" role="tab" aria-selected="false">
+                                <span class="tab-icon">🛡️</span>
+                                <span class="tab-label">nginx.conf</span>
+                            </button>
+                            <button type="button" class="artifact-tab" data-file="deploy_sh" role="tab" aria-selected="false">
+                                <span class="tab-icon">📜</span>
+                                <span class="tab-label">scripts/deploy.sh</span>
+                            </button>
+                            <button type="button" class="artifact-tab" data-file="terraform" role="tab" aria-selected="false">
+                                <span class="tab-icon">☁️</span>
+                                <span class="tab-label">terraform/main.tf</span>
+                            </button>
+                        </div>
+
+                        <!-- Active File Sub-Header Bar -->
+                        <div class="artifact-header-bar">
+                            <div class="artifact-meta-wrap">
+                                <span class="artifact-filepath" id="artifactFilePath">Dockerfile</span>
+                                <span class="artifact-badge" id="artifactBadge">Multi-Stage CIS Compliant</span>
+                                <span class="artifact-lines" id="artifactLines">Lines: 32 | Size: 1.1 KB</span>
+                            </div>
+
+                            <div class="artifact-actions-group">
+                                <button type="button" id="copyArtifactBtn" class="btn-secondary btn-sm" title="Copy code to clipboard">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                    <span>Copy</span>
+                                </button>
+                                <button type="button" id="downloadArtifactBtn" class="btn-secondary btn-sm" title="Download this file to your computer">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                                    <span>Download</span>
+                                </button>
+                                <button type="button" id="downloadAllArtifactsBtn" class="btn-primary btn-sm" title="Download executable devops-init.sh script that creates all files automatically">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+                                    <span>Download All (devops-init.sh)</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Code Viewer -->
+                        <div class="artifact-code-viewer">
+                            <pre class="artifact-code-pre"><code id="generatorCodeDisplay" class="artifact-code"></code></pre>
+                        </div>
+
+                        <!-- CIS Readiness & Hardening Scorecard -->
+                        <div class="generator-scorecard">
+                            <div class="scorecard-top">
+                                <div class="scorecard-metric">
+                                    <span class="scorecard-label">CIS &amp; DevOps Readiness Score:</span>
+                                    <div class="scorecard-score-box">
+                                        <span class="score-number" id="genScoreValue">98</span>
+                                        <span class="score-max">/ 100</span>
+                                        <span class="score-grade-badge">Grade A+</span>
+                                    </div>
+                                </div>
+                                <span class="scorecard-status-pill">Production Ready</span>
+                            </div>
+
+                            <div class="scorecard-checks-list">
+                                <div class="score-check-item">
+                                    <span class="check-icon">✓</span>
+                                    <span class="check-text"><strong>Multi-Stage Build:</strong> Build tools isolated from runtime; small attack surface</span>
+                                </div>
+                                <div class="score-check-item">
+                                    <span class="check-icon">✓</span>
+                                    <span class="check-text"><strong>Rootless Container:</strong> Runs as unprivileged appuser (UID 10001)</span>
+                                </div>
+                                <div class="score-check-item">
+                                    <span class="check-icon">✓</span>
+                                    <span class="check-text"><strong>Probes &amp; Telemetry:</strong> Automated HTTP /healthz probes with exponential retries</span>
+                                </div>
+                                <div class="score-check-item">
+                                    <span class="check-icon">✓</span>
+                                    <span class="check-text"><strong>Zero-Downtime Rollback:</strong> Automated release validation with instant atomic fallback</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Ecosystem Inter-Tool Bridges -->
+                        <div class="artifact-bridges-card">
+                            <span class="bridges-card-label">Cross-Platform Tool Bridges (Pair Programming):</span>
+                            <div class="bridges-buttons-row">
+                                <button type="button" id="bridgeToInspectorBtn" class="generator-bridge-btn" title="Send generated Dockerfile or deploy script to Script Inspector for deep SAST analysis">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                                    <span>Audit in Script Inspector &rarr;</span>
+                                </button>
+                                <button type="button" id="bridgeToAiBtn" class="generator-bridge-btn" title="Send architecture configuration to DevOps AI Copilot for custom tuning">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                                    <span>Tune with DevOps AI &rarr;</span>
+                                </button>
+                                <button type="button" id="bridgeToTerminalBtn" class="generator-bridge-btn" title="Load deployment commands directly into the CLI Sandbox">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                                    <span>Test in CLI Sandbox &rarr;</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- PAGE 3: SCRIPT INSPECTOR & DEVSECOPS -->
+        <div id="page-inspector" class="feature-page">
+            <div class="page-banner">
+                <span class="page-banner-tag">Workspace 02</span>
+                <h1 class="page-banner-title">Script Inspector &amp; Security Auditing</h1>
+                <p class="page-banner-desc">Paste your deployment scripts, Dockerfiles, or CI pipelines to inspect for vulnerabilities, auto-harden configurations, and scan live CVE advisories via OSV.dev.</p>
+            </div>
+<!-- SECTION 1: Interactive Script & Config Security Analyzer (NEW FEATURE) -->
+        <section id="analyzer" class="section-block">
+            <div class="section-header">
+                <div class="section-tag">Interactive User Tool</div>
+                <h2 class="section-title">Interactive Script &amp; Config Security Inspector</h2>
+                <p class="section-desc">
+                    Paste your own deployment scripts, Dockerfiles, or CI pipelines. The analyzer evaluates your code for security vulnerabilities, race conditions, missing error boundaries, and unsafe permissions—and can automatically harden them.
+                </p>
+            </div>
+
+            <div class="analyzer-card">
+                <div class="analyzer-header-controls">
+                    <div class="analyzer-type-select-wrap">
+                        <label for="scriptTypeSelect" class="form-label">Script / Config Type:</label>
+                        <select id="scriptTypeSelect" class="form-select">
+                            <option value="bash">Bash / Shell Script (.sh)</option>
+                            <option value="dockerfile">Dockerfile</option>
+                            <option value="gitlab_ci">GitLab CI/CD (.gitlab-ci.yml)</option>
+                            <option value="nginx">Nginx Config (nginx.conf)</option>
+                        </select>
+                    </div>
+
+                    <div class="analyzer-preset-wrap">
+                        <span class="preset-label">Load Samples:</span>
+                        <button class="preset-btn" id="loadVulnerableBashBtn">Vulnerable Bash Deploy</button>
+                        <button class="preset-btn" id="loadInsecureDockerBtn">Insecure Dockerfile</button>
+                        <button class="preset-btn" id="loadClearEditorBtn">Clear Editor</button>
+                    </div>
+                </div>
+
+                <div class="analyzer-editor-grid">
+                    <div class="editor-pane">
+                        <div class="editor-pane-header">
+                            <span class="editor-filename" id="editorFilenameBadge">script.sh</span>
+                            <div class="editor-actions">
+                                <button id="askAiAuditBtn" class="term-btn" title="Send this script to AI Copilot">Ask AI to Audit</button>
+                                <button id="copyScriptInputBtn" class="term-btn">Copy</button>
+                            </div>
+                        </div>
+                        <textarea id="scriptInputTextarea" class="code-textarea" spellcheck="false" placeholder="# Paste your shell script, Dockerfile, or CI configuration here..."></textarea>
+                        <div class="editor-footer-bar">
+                            <button id="runScriptAuditBtn" class="btn-primary btn-sm">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                                <span>Analyze Code</span>
+                            </button>
+                            <button id="autoHardenBtn" class="btn-secondary btn-sm">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                                </svg>
+                                <span>Auto-Harden &amp; Fix</span>
+                            </button>
+                            <span class="editor-stats" id="scriptEditorStats">Lines: 0 | Chars: 0</span>
+                        </div>
+                    </div>
+
+                    <!-- Analysis Output Pane -->
+                    <div class="audit-results-pane" id="auditResultsPane">
+                        <div class="empty-state">
+                            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                <polyline points="10 9 9 9 8 9"></polyline>
+                            </svg>
+                            <p>Enter or paste your script and click <strong>"Analyze Code"</strong> to run our security rule engine.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+<!-- SECTION 6: Live DevSecOps Vulnerability Scanner (Real API: api.osv.dev) -->
+        <section id="secops" class="section-block">
+            <div class="section-header">
+                <div class="section-tag">Live DevSecOps Tool</div>
+                <h2 class="section-title">Real-Time Package Vulnerability Scanner</h2>
+                <p class="section-desc">
+                    DevSecOps mandates scanning every dependency and base image layer before deploying. This tool communicates with the live <strong>OSV.dev (Open Source Vulnerability) API</strong> to fetch real CVE advisories, CVSS severity scores, and patch versions.
+                </p>
+            </div>
+
+            <div class="secops-card">
+                <div class="secops-form-row">
+                    <div class="secops-input-group">
+                        <label for="osvPackageInput" class="form-label">Package Name:</label>
+                        <input type="text" id="osvPackageInput" class="form-input" placeholder="e.g. nginx, openssl, curl, express, lodash, urllib3" value="nginx">
+                    </div>
+
+                    <div class="secops-input-group">
+                        <label for="osvEcosystemSelect" class="form-label">Ecosystem / OS:</label>
+                        <select id="osvEcosystemSelect" class="form-select">
+                            <option value="Alpine">Alpine Linux (apk)</option>
+                            <option value="Debian">Debian Linux (apt)</option>
+                            <option value="npm">npm (Node.js)</option>
+                            <option value="PyPI">PyPI (Python)</option>
+                            <option value="Go">Go Modules</option>
+                        </select>
+                    </div>
+
+                    <div class="secops-btn-wrap">
+                        <button id="scanOsvBtn" class="btn-primary">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                            <span>Scan Live API</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Quick Presets -->
+                <div class="preset-badges-row">
+                    <span class="preset-label">Quick Test Presets:</span>
+                    <button class="preset-btn" data-pkg="nginx" data-eco="Alpine">Alpine: Nginx</button>
+                    <button class="preset-btn" data-pkg="openssl" data-eco="Alpine">Alpine: OpenSSL</button>
+                    <button class="preset-btn" data-pkg="curl" data-eco="Alpine">Alpine: Curl</button>
+                    <button class="preset-btn" data-pkg="lodash" data-eco="npm">npm: Lodash</button>
+                    <button class="preset-btn" data-pkg="urllib3" data-eco="PyPI">PyPI: Urllib3</button>
+                </div>
+
+                <!-- Scanner Results View -->
+                <div class="osv-results-container" id="osvResultsContainer">
+                    <div class="empty-state">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                        </svg>
+                        <p>Click "Scan Live API" to fetch real CVEs and vulnerability metrics directly from OSV.dev.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        </div> <!-- /#page-inspector -->
+
+        <!-- PAGE 4: DEVOPS AI COPILOT -->
+        <div id="page-ai" class="feature-page">
+            <div class="page-banner">
+                <span class="page-banner-tag">Workspace 03</span>
+                <h1 class="page-banner-title">DevOps AI Mentor &amp; Copilot</h1>
+                <p class="page-banner-desc">Get instant architectural advice, error diagnoses, or script security reviews. Powered by an intelligent DevOps reasoning engine with optional Google Gemini 1.5 Flash support.</p>
+            </div>
+<!-- SECTION 2: DevOps AI Assistant & CloudOps Mentor (NEW FEATURE) -->
+        <section id="ai-assistant" class="section-block">
+            <div class="section-header">
+                <div class="section-tag">DevOps AI Copilot</div>
+                <h2 class="section-title">CloudOps AI Mentor &amp; Debugging Copilot</h2>
+                <p class="section-desc">
+                    Get instant architectural advice, error diagnoses, or script reviews. Powered by an intelligent DevOps reasoning engine (with optional Google Gemini API support) designed specifically for cloud-native workflows.
+                </p>
+            </div>
+
+            <div class="ai-assistant-card">
+                <div class="ai-chat-header">
+                    <div class="ai-header-brand">
+                        <div class="ai-avatar-icon" aria-hidden="true">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="ai-header-title">DevOps AI Copilot</h3>
+                            <span class="ai-header-sub">Specialized in Git, Linux, Docker, CI/CD, AWS, and DevSecOps</span>
+                        </div>
+                    </div>
+                    <div class="ai-header-actions">
+                        <button id="openAiSettingsBtn" class="term-btn" title="Configure Custom Gemini API Key">API Key Settings</button>
+                        <button id="clearAiChatBtn" class="term-btn" title="Clear conversation history">Clear Chat</button>
+                    </div>
+                </div>
+
+                <!-- Chat Suggestions Chips -->
+                <div class="ai-suggestion-chips" id="aiSuggestionChips">
+                    <button class="ai-chip" data-prompt="How do I fix a 502 Bad Gateway in Nginx?">💡 Fix Nginx 502 Bad Gateway</button>
+                    <button class="ai-chip" data-prompt="Why is umask 077 essential for SSH keys in CI/CD?">💡 Explain umask 077</button>
+                    <button class="ai-chip" data-prompt="Write a multi-stage Dockerfile for Node.js Express">💡 Multi-Stage Dockerfile</button>
+                    <button class="ai-chip" data-prompt="How do I calculate usable IPs in an AWS VPC /24 subnet?">💡 AWS VPC Subnets</button>
+                    <button class="ai-chip" data-prompt="Review the code currently loaded in the script analyzer">💡 Audit My Script</button>
+                </div>
+
+                <!-- Chat Message Stream -->
+                <div class="ai-chat-thread" id="aiChatThread" role="log" aria-live="polite">
+                    <div class="ai-msg bot-msg">
+                        <div class="msg-bubble">
+                            <p>Hello! I am your <strong>DevOps AI Copilot</strong>. I can analyze your deployment scripts, write Dockerfiles, configure GitLab CI/CD pipelines, explain Linux permissions, or troubleshoot production incidents. How can I help you today?</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat Input Form -->
+                <form id="aiChatForm" class="ai-input-form">
+                    <div class="ai-input-container">
+                        <textarea id="aiUserInput" class="ai-textarea" rows="1" placeholder="Ask any DevOps question, request code, or ask for debugging help..." aria-label="DevOps AI Prompt"></textarea>
+                        <button type="submit" id="sendAiBtn" class="ai-send-btn" aria-label="Send prompt">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="22" y1="2" x2="11" y2="13"></line>
+                                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                            </svg>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+        </div> <!-- /#page-ai -->
+
+        <!-- PAGE 5: CLI TERMINAL & PIPELINE SIMULATOR -->
+        <div id="page-terminal" class="feature-page">
+            <div class="page-banner">
+                <span class="page-banner-tag">Workspace 04</span>
+                <h1 class="page-banner-title">Interactive Linux CLI &amp; CI/CD Simulator</h1>
+                <p class="page-banner-desc">Practice running essential DevOps commands directly in your browser, and observe how 5-stage production CI/CD pipelines isolate and diagnose edge-case failures.</p>
+            </div>
+<!-- SECTION 3: Interactive Live DevOps Terminal Sandbox (NEW FEATURE) -->
+        <section id="terminal-sandbox" class="section-block">
+            <div class="section-header">
+                <div class="section-tag">Interactive CLI</div>
+                <h2 class="section-title">DevOps Command-Line Sandbox</h2>
+                <p class="section-desc">
+                    Practice running essential DevOps commands directly in your browser. Type <code>help</code> to see available commands, explore Docker states, inspect Git branches, and test Linux permission utilities.
+                </p>
+            </div>
+
+            <div class="cli-sandbox-card">
+                <div class="terminal-titlebar">
+                    <div class="terminal-dots">
+                        <span class="dot red-dot"></span>
+                        <span class="dot yellow-dot"></span>
+                        <span class="dot green-dot"></span>
+                    </div>
+                    <div class="terminal-title">
+                        <span>ubuntu@devops-node-01: ~ (bash 5.2)</span>
+                    </div>
+                    <div class="terminal-actions">
+                        <button id="clearCliBtn" class="term-btn">Clear</button>
+                    </div>
+                </div>
+
+                <div class="cli-terminal-body" id="cliTerminalBody">
+                    <div class="term-line term-dim"># Interactive DevOps Linux Sandbox initialized.</div>
+                    <div class="term-line term-dim"># Type "help" or "commands" to see supported operations.</div>
+                    <div class="term-line term-info">&gt; Available tools: git, docker, nginx, umask, chmod, curl, ps, df, uname.</div>
+                </div>
+
+                <div class="cli-prompt-row">
+                    <span class="cli-prompt-label">ubuntu@devops-node-01:~$</span>
+                    <input type="text" id="cliPromptInput" class="cli-prompt-input" autocomplete="off" spellcheck="false" placeholder="Type a command (e.g. docker ps, git status, nginx -t)...">
+                </div>
+            </div>
+        </section>
+
+<!-- SECTION 4: Interactive CI/CD Pipeline Simulator -->
+        <section id="simulator" class="section-block">
+            <div class="section-header">
+                <div class="section-tag">Interactive Simulation</div>
+                <h2 class="section-title">Production CI/CD Engine &amp; Edge-Case Sandbox</h2>
+                <p class="section-desc">
+                    Experience how GitLab CI/CD executes jobs in real time. Switch scenarios to intentionally trigger realistic edge cases — like secret leaks, assertion failures, or SSH timeouts — and see how hardened pipelines diagnose and resolve them.
+                </p>
+            </div>
+
+            <div class="simulator-card">
+                <!-- Simulator Top Control Bar -->
+                <div class="sim-control-bar">
+                    <div class="scenario-selector-wrap">
+                        <label for="scenarioSelect" class="scenario-label">Simulation Scenario:</label>
+                        <select id="scenarioSelect" class="scenario-dropdown">
+                            <option value="happy">✅ Standard Production Run (All 5 Stages Pass)</option>
+                            <option value="test_fail">❌ Edge Case 1: Linter &amp; Syntax Verification Failure</option>
+                            <option value="security_fail">❌ Edge Case 2: Exposed Secret / Permissive SSH Key</option>
+                            <option value="docker_fail">❌ Edge Case 3: Docker Hub Registry Auth Failure (401)</option>
+                            <option value="deploy_fail">❌ Edge Case 4: EC2 SSH Timeout (Port 22 Blocked)</option>
+                        </select>
+                    </div>
+
+                    <div class="sim-actions">
+                        <button id="runPipelineBtn" class="btn-primary btn-sm">
+                            <svg class="play-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                            </svg>
+                            <span id="runBtnText">Run Pipeline</span>
+                        </button>
+                        <button id="stepPipelineBtn" class="btn-secondary btn-sm" title="Step through one stage at a time">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="9 18 15 12 9 6"></polyline>
+                            </svg>
+                            <span>Step Stage</span>
+                        </button>
+                        <button id="resetPipelineBtn" class="btn-ghost btn-sm" title="Reset pipeline to initial state">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                                <path d="M3 3v5h5"></path>
+                            </svg>
+                            <span>Reset</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Visual Pipeline Stage Graph -->
+                <div class="pipeline-track-container" aria-label="Pipeline Stages Track">
+                    <div class="stage-nodes-list" id="stageNodesList">
+                        <!-- Stage 1 -->
+                        <div class="stage-node-item" data-stage="build">
+                            <div class="stage-icon-circle">
+                                <span class="stage-step-num">1</span>
+                                <svg class="stage-status-icon success-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                                <svg class="stage-status-icon fail-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                                <div class="stage-spinner" aria-hidden="true"></div>
+                            </div>
+                            <div class="stage-node-meta">
+                                <span class="stage-node-name">Build</span>
+                                <span class="stage-node-status">Pending</span>
+                            </div>
+                        </div>
+
+                        <div class="stage-connector-line"></div>
+
+                        <!-- Stage 2 -->
+                        <div class="stage-node-item" data-stage="test">
+                            <div class="stage-icon-circle">
+                                <span class="stage-step-num">2</span>
+                                <svg class="stage-status-icon success-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                                <svg class="stage-status-icon fail-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                                <div class="stage-spinner" aria-hidden="true"></div>
+                            </div>
+                            <div class="stage-node-meta">
+                                <span class="stage-node-name">Test Suite</span>
+                                <span class="stage-node-status">Pending</span>
+                            </div>
+                        </div>
+
+                        <div class="stage-connector-line"></div>
+
+                        <!-- Stage 3 -->
+                        <div class="stage-node-item" data-stage="security">
+                            <div class="stage-icon-circle">
+                                <span class="stage-step-num">3</span>
+                                <svg class="stage-status-icon success-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                                <svg class="stage-status-icon fail-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                                <div class="stage-spinner" aria-hidden="true"></div>
+                            </div>
+                            <div class="stage-node-meta">
+                                <span class="stage-node-name">Security SAST</span>
+                                <span class="stage-node-status">Pending</span>
+                            </div>
+                        </div>
+
+                        <div class="stage-connector-line"></div>
+
+                        <!-- Stage 4 -->
+                        <div class="stage-node-item" data-stage="docker">
+                            <div class="stage-icon-circle">
+                                <span class="stage-step-num">4</span>
+                                <svg class="stage-status-icon success-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                                <svg class="stage-status-icon fail-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                                <div class="stage-spinner" aria-hidden="true"></div>
+                            </div>
+                            <div class="stage-node-meta">
+                                <span class="stage-node-name">Docker Build</span>
+                                <span class="stage-node-status">Pending</span>
+                            </div>
+                        </div>
+
+                        <div class="stage-connector-line"></div>
+
+                        <!-- Stage 5 -->
+                        <div class="stage-node-item" data-stage="deploy">
+                            <div class="stage-icon-circle">
+                                <span class="stage-step-num">5</span>
+                                <svg class="stage-status-icon success-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                                <svg class="stage-status-icon fail-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                                <div class="stage-spinner" aria-hidden="true"></div>
+                            </div>
+                            <div class="stage-node-meta">
+                                <span class="stage-node-name">EC2 Deploy</span>
+                                <span class="stage-node-status">Pending</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Real-time Console Terminal Output -->
+                <div class="sim-terminal-window">
+                    <div class="terminal-titlebar">
+                        <div class="terminal-dots">
+                            <span class="dot red-dot"></span>
+                            <span class="dot yellow-dot"></span>
+                            <span class="dot green-dot"></span>
+                        </div>
+                        <div class="terminal-title">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="4 17 10 11 4 5"></polyline>
+                                <line x1="12" y1="19" x2="20" y2="19"></line>
+                            </svg>
+                            <span id="terminalRunnerTag">gitlab-runner #4092 (Ubuntu 22.04 LTS / alpine-container)</span>
+                        </div>
+                        <div class="terminal-actions">
+                            <button id="clearLogsBtn" class="term-btn" title="Clear console output">Clear</button>
+                            <button id="copyLogsBtn" class="term-btn" title="Copy console logs to clipboard">Copy</button>
+                        </div>
+                    </div>
+                    <div class="terminal-body" id="terminalOutput" role="log" aria-live="polite">
+                        <div class="term-line term-dim"># Interactive GitLab Runner Simulator ready.</div>
+                        <div class="term-line term-dim"># Select a scenario and click "Run Pipeline" to execute stages.</div>
+                        <div class="term-line term-info">&gt; System initialized with hardened security configurations.</div>
+                    </div>
+                    <div class="terminal-footer">
+                        <div class="term-stat">
+                            <span>Status:</span>
+                            <strong id="pipelineStatusText">IDLE</strong>
+                        </div>
+                        <div class="term-stat">
+                            <span>Elapsed:</span>
+                            <strong id="pipelineElapsedText">0.0s</strong>
+                        </div>
+                        <div class="term-stat">
+                            <span>Artifacts:</span>
+                            <strong id="pipelineArtifactsText">0 files</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        </div> <!-- /#page-terminal -->
+
+        <!-- PAGE 6: CLOUD NETWORKING & CONTAINER STUDIO -->
+        <div id="page-network" class="feature-page">
+            <div class="page-banner">
+                <span class="page-banner-tag">Workspace 05</span>
+                <h1 class="page-banner-title">Cloud Networking, Containers &amp; Git APIs</h1>
+                <p class="page-banner-desc">Perform real-time DNS lookups via Google DoH, calculate AWS VPC CIDR allocations, generate hardened Dockerfiles, and explore live GitLab/GitHub APIs.</p>
+            </div>
+<!-- SECTION 7: Live Network & DNS Diagnostics Lab (Real APIs: Google DoH & IP Telemetry) -->
+        <section id="network" class="section-block">
+            <div class="section-header">
+                <div class="section-tag">DevOps Networking</div>
+                <h2 class="section-title">DNS-over-HTTPS &amp; Subnet Engineering Lab</h2>
+                <p class="section-desc">
+                    Cloud infrastructure relies on DNS routing, reverse proxies, and VPC subnetting. Use this lab to query live DNS records over HTTPS and calculate CIDR network boundaries for AWS architectures.
+                </p>
+            </div>
+
+            <div class="network-grid">
+                <!-- Tool 1: Live DoH Resolver -->
+                <div class="network-tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-card-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="2" y1="12" x2="22" y2="12"></line>
+                                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="tool-card-title">Live DNS-over-HTTPS Resolver</h3>
+                            <span class="tool-card-sub">Powered by Google DNS (8.8.8.8)</span>
+                        </div>
+                    </div>
+
+                    <div class="dns-input-row">
+                        <input type="text" id="dnsDomainInput" class="form-input" placeholder="e.g. github.com, gitlab.com, aws.amazon.com" value="github.com">
+                        <select id="dnsTypeSelect" class="form-select dns-select">
+                            <option value="A">A (IPv4)</option>
+                            <option value="AAAA">AAAA (IPv6)</option>
+                            <option value="CNAME">CNAME</option>
+                            <option value="TXT">TXT (Verification)</option>
+                            <option value="MX">MX (Mail)</option>
+                            <option value="NS">NS (Nameserver)</option>
+                        </select>
+                        <button id="resolveDnsBtn" class="btn-primary btn-sm">Resolve</button>
+                    </div>
+
+                    <div class="dns-output-box" id="dnsOutputBox">
+                        <div class="term-dim"># Enter a domain and click "Resolve" to query live DNS records.</div>
+                    </div>
+                </div>
+
+                <!-- Tool 2: Interactive CIDR & VPC Subnet Calculator -->
+                <div class="network-tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-card-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
+                                <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
+                                <line x1="6" y1="6" x2="6.01" y2="6"></line>
+                                <line x1="6" y1="18" x2="6.01" y2="18"></line>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="tool-card-title">AWS VPC &amp; Subnet CIDR Calculator</h3>
+                            <span class="tool-card-sub">Calculates network address, usable IPs, &amp; AWS reserves</span>
+                        </div>
+                    </div>
+
+                    <div class="cidr-input-row">
+                        <input type="text" id="cidrInput" class="form-input" placeholder="e.g. 10.0.0.0/16 or 172.16.1.0/24" value="10.0.1.0/24">
+                        <button id="calcCidrBtn" class="btn-primary btn-sm">Calculate</button>
+                    </div>
+
+                    <div class="cidr-output-grid" id="cidrOutputGrid">
+                        <!-- Populated by script.js -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+<!-- SECTION 9: Dockerfile & Docker-Compose Studio with Security Linter -->
+        <section id="docker-studio" class="section-block">
+            <div class="section-header">
+                <div class="section-tag">Container Engineering</div>
+                <h2 class="section-title">Dockerfile &amp; Compose Generator with Security Linter</h2>
+                <p class="section-desc">
+                    Build production-ready, multi-stage Dockerfiles and multi-container <code>docker-compose.yml</code> files. Our real-time security linter flags bad practices like running as root, missing healthchecks, and bloated base images.
+                </p>
+            </div>
+
+            <div class="docker-studio-card">
+                <div class="docker-controls-pane">
+                    <h3 class="pane-subtitle">Stack Architecture</h3>
+
+                    <div class="form-group">
+                        <label for="dockerStackSelect" class="form-label">Application Runtime:</label>
+                        <select id="dockerStackSelect" class="form-select">
+                            <option value="nginx_static">Static Web (Hardened Nginx:Alpine)</option>
+                            <option value="node_express">Node.js Express (Multi-Stage Build)</option>
+                            <option value="python_fastapi">Python FastAPI (Slim Alpine / Uvicorn)</option>
+                            <option value="golang">Go Fiber (Distroless / Scratch Minimal)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dockerDbSelect" class="form-label">Database / Cache Service:</label>
+                        <select id="dockerDbSelect" class="form-select">
+                            <option value="none">None (Standalone)</option>
+                            <option value="postgres">PostgreSQL 16 (Alpine)</option>
+                            <option value="redis">Redis 7 (In-Memory Cache)</option>
+                            <option value="both">PostgreSQL + Redis (Full Stack)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Hardening Flags:</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="chkDockerHealth" checked>
+                                <span>Include Docker HEALTHCHECK Probe</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="chkDockerNonRoot" checked>
+                                <span>Run as Non-Root User (UID 10001)</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="chkDockerMultiStage" checked>
+                                <span>Multi-Stage Compilation</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Security Linter Results -->
+                    <div class="linter-box">
+                        <span class="linter-title">Security Linter Audit:</span>
+                        <div class="linter-results" id="linterResults">
+                            <div class="linter-item pass">✅ Non-root user enforced.</div>
+                            <div class="linter-item pass">✅ Healthcheck probe active.</div>
+                            <div class="linter-item pass">✅ Multi-stage layer cache optimized.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="docker-code-pane">
+                    <div class="docker-tabs">
+                        <button class="doc-tab active" data-file="dockerfile">Dockerfile</button>
+                        <button class="doc-tab" data-file="compose">docker-compose.yml</button>
+                    </div>
+                    <pre class="yaml-code-display"><code id="dockerOutputCode"># Generating Docker configuration...</code></pre>
+                </div>
+            </div>
+        </section>
+
+<!-- SECTION 8: Live GitHub & GitLab CI/CD API Studio -->
+        <section id="git-gitlab" class="section-block">
+            <div class="section-header">
+                <div class="section-tag">API Integration</div>
+                <h2 class="section-title">Live GitLab &amp; GitHub Integration Studio</h2>
+                <p class="section-desc">
+                    Connect directly to live repositories and public APIs. Fetch official GitLab CI/CD pipeline templates in real time and inspect live repository metadata and commits from GitHub.
+                </p>
+            </div>
+
+            <div class="git-gitlab-grid">
+                <!-- GitLab Official Template Explorer -->
+                <div class="api-card">
+                    <div class="api-card-header">
+                        <div class="api-badge gitlab-badge">GitLab REST API</div>
+                        <h3 class="api-card-title">Official GitLab CI Template Explorer</h3>
+                    </div>
+                    <p class="api-card-desc">
+                        Fetch real, official production pipeline templates from GitLab's canonical template library:
+                    </p>
+
+                    <div class="template-selector-row">
+                        <select id="gitlabTemplateSelect" class="form-select">
+                            <option value="Bash">Bash</option>
+                            <option value="Docker">Docker</option>
+                            <option value="Nodejs">Nodejs</option>
+                            <option value="Python">Python</option>
+                            <option value="Go">Go</option>
+                            <option value="Terraform">Terraform</option>
+                            <option value="Security/SAST">Security / SAST</option>
+                            <option value="Pages">GitLab Pages</option>
+                        </select>
+                        <button id="fetchTemplateBtn" class="btn-primary btn-sm">Load from GitLab</button>
+                    </div>
+
+                    <div class="template-code-box">
+                        <pre><code id="gitlabTemplateCode"># Click "Load from GitLab" to fetch the real template via REST API.</code></pre>
+                    </div>
+                </div>
+
+                <!-- GitHub Live Repository Inspector -->
+                <div class="api-card">
+                    <div class="api-card-header">
+                        <div class="api-badge github-badge">GitHub REST API</div>
+                        <h3 class="api-card-title">Live GitHub Repository &amp; Commit Inspector</h3>
+                    </div>
+                    <p class="api-card-desc">
+                        Inspect any public repository live: stars, forks, open issues, and the latest commits:
+                    </p>
+
+                    <div class="repo-input-row">
+                        <input type="text" id="githubRepoInput" class="form-input" placeholder="owner/repo (e.g. Jatin-dudhani/DevOps-learning-project)" value="Jatin-dudhani/DevOps-learning-project">
+                        <button id="fetchGithubRepoBtn" class="btn-primary btn-sm">Fetch Repo</button>
+                    </div>
+
+                    <div class="github-repo-results" id="githubRepoResults">
+                        <div class="term-dim"># Enter a repository and click "Fetch Repo" to inspect live GitHub metadata.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        </div> <!-- /#page-network -->
+
+        <!-- PAGE 7: DEVOPS ACADEMY, INCIDENTS & CHEAT SHEET -->
+        <div id="page-academy" class="feature-page">
+            <div class="page-banner">
+                <span class="page-banner-tag">Workspace 06</span>
+                <h1 class="page-banner-title">DevOps Academy, SRE Outage Lab &amp; Reference</h1>
+                <p class="page-banner-desc">Work through 6 structured learning modules, triage live simulated production outages, evaluate your cloud skills, and search verified CLI commands.</p>
+            </div>
+<!-- SECTION 5: Structured DevOps Learning Academy (Beginner to Intermediate Roadmap) -->
+        <section id="academy" class="section-block">
+            <div class="section-header">
+                <div class="section-tag">Interactive Curriculum</div>
+                <h2 class="section-title">DevOps Learning Academy</h2>
+                <p class="section-desc">
+                    A comprehensive, structured syllabus taking you step-by-step from foundational version control and Linux CLI administration to container orchestration, DevSecOps, and cloud deployment.
+                </p>
+            </div>
+
+            <div class="academy-container">
+                <div class="academy-tabs" id="academyTabs" role="tablist">
+                    <button class="academy-tab active" data-mod="mod1" role="tab" aria-selected="true">
+                        <span class="mod-pill">Mod 1</span>
+                        <span class="mod-name">Git &amp; Workflows</span>
+                    </button>
+                    <button class="academy-tab" data-mod="mod2" role="tab" aria-selected="false">
+                        <span class="mod-pill">Mod 2</span>
+                        <span class="mod-name">Linux &amp; Shell Scripting</span>
+                    </button>
+                    <button class="academy-tab" data-mod="mod3" role="tab" aria-selected="false">
+                        <span class="mod-pill">Mod 3</span>
+                        <span class="mod-name">Docker &amp; Containers</span>
+                    </button>
+                    <button class="academy-tab" data-mod="mod4" role="tab" aria-selected="false">
+                        <span class="mod-pill">Mod 4</span>
+                        <span class="mod-name">CI/CD &amp; Automation</span>
+                    </button>
+                    <button class="academy-tab" data-mod="mod5" role="tab" aria-selected="false">
+                        <span class="mod-pill">Mod 5</span>
+                        <span class="mod-name">DevSecOps &amp; Security</span>
+                    </button>
+                    <button class="academy-tab" data-mod="mod6" role="tab" aria-selected="false">
+                        <span class="mod-pill">Mod 6</span>
+                        <span class="mod-name">AWS EC2 &amp; Networking</span>
+                    </button>
+                </div>
+
+                <div class="academy-content-pane" id="academyContentPane">
+                    <!-- Populated dynamically by script.js -->
+                </div>
+            </div>
+        </section>
+
+<!-- SECTION 10: Production Incident Simulation Lab (Troubleshooting Game) -->
+        <section id="incidents" class="section-block">
+            <div class="section-header">
+                <div class="section-tag">Incident Response</div>
+                <h2 class="section-title">Production Outage Triage Lab</h2>
+                <p class="section-desc">
+                    In real DevOps, systems break. Step into the shoes of an on-call engineer to diagnose production outages, inspect server logs, and choose the correct mitigation to restore service.
+                </p>
+            </div>
+
+            <div class="incident-card">
+                <div class="incident-nav">
+                    <button class="incident-tab active" data-inc="inc1">🚨 Incident 1: 502 Bad Gateway</button>
+                    <button class="incident-tab" data-inc="inc2">🚨 Incident 2: Disk 100% Full</button>
+                    <button class="incident-tab" data-inc="inc3">🚨 Incident 3: Docker Daemon Refused</button>
+                    <button class="incident-tab" data-inc="inc4">🚨 Incident 4: EC2 SSH Timeout</button>
+                </div>
+
+                <div class="incident-body" id="incidentBody">
+                    <!-- Populated dynamically by script.js -->
+                </div>
+            </div>
+        </section>
+
+<!-- SECTION 11: DevOps Knowledge Quiz & Skill Evaluator -->
+        <section id="quiz" class="section-block">
+            <div class="section-header">
+                <div class="section-tag">Knowledge Assessment</div>
+                <h2 class="section-title">DevOps Skill Evaluator &amp; Quiz</h2>
+                <p class="section-desc">
+                    Test your understanding of Linux permissions, CI/CD pipeline mechanics, Docker security, and cloud infrastructure. Get instant feedback and score tracking.
+                </p>
+            </div>
+
+            <div class="quiz-container" id="quizContainer">
+                <div class="quiz-header">
+                    <div class="quiz-progress-wrap">
+                        <span class="quiz-progress-label">Question <span id="currentQuestionNum">1</span> of <span id="totalQuestionsNum">5</span></span>
+                        <div class="quiz-progress-bar">
+                            <div class="quiz-progress-fill" id="quizProgressFill" style="width: 20%;"></div>
+                        </div>
+                    </div>
+                    <div class="quiz-score-badge">
+                        <span>Score:</span>
+                        <strong id="quizScoreText">0 / 0</strong>
+                    </div>
+                </div>
+
+                <div class="quiz-question-card" id="quizQuestionCard">
+                    <!-- Populated dynamically by script.js -->
+                </div>
+            </div>
+        </section>
+
+<!-- SECTION 13: DevOps CLI Cheat Sheet & Command Sandbox -->
+        <section id="cheatsheet" class="section-block">
+            <div class="section-header">
+                <div class="section-tag">Quick Reference</div>
+                <h2 class="section-title">DevOps CLI Command Reference</h2>
+                <p class="section-desc">
+                    Search and copy verified commands for Git, Docker, Linux permissions, GitLab CI, and AWS EC2 server administration.
+                </p>
+            </div>
+
+            <div class="cheatsheet-container">
+                <div class="cheatsheet-search-bar">
+                    <div class="search-input-wrap">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                        <input type="text" id="cheatSearchInput" placeholder="Search commands (e.g. docker run, ssh-keygen, umask)..." aria-label="Search CLI commands">
+                    </div>
+
+                    <div class="category-pills" id="categoryPills">
+                        <button class="cat-pill active" data-category="all">All</button>
+                        <button class="cat-pill" data-category="git">Git</button>
+                        <button class="cat-pill" data-category="docker">Docker</button>
+                        <button class="cat-pill" data-category="linux">Linux &amp; SSH</button>
+                        <button class="cat-pill" data-category="nginx">Nginx &amp; Web</button>
+                    </div>
+                </div>
+
+                <div class="commands-grid" id="commandsGrid">
+                    <!-- Populated by script.js -->
+                </div>
+            </div>
+        </section>
+        </div> <!-- /#page-academy -->
+
+        <!-- ========================================================================= -->
+        <!-- PAGE 8: Live Cloud Architecture & Topology Visualizer                     -->
+        <!-- ========================================================================= -->
+        <div id="page-topology" class="feature-page">
+            <section id="cloud-topology" class="section-block">
+                <div class="section-header">
+                    <div class="section-tag">Cloud Infrastructure</div>
+                    <h2 class="section-title">Live Cloud Architecture &amp; Topology Visualizer</h2>
+                    <p class="section-desc">
+                        Explore an interactive, production-grade cloud native topology. Inspect real-time network traffic flows, test regional failovers, trigger chaos injection scenarios, and inspect production node telemetry and Kubernetes manifests.
+                    </p>
+                </div>
+
+                <!-- Top Control Bar -->
+                <div class="topology-controls-bar">
+                    <div class="topo-control-group">
+                        <label for="topoRegionSelect" class="topo-label">Active Cloud Region:</label>
+                        <select id="topoRegionSelect" class="form-select topo-select">
+                            <option value="us-east-1" selected>us-east-1 (N. Virginia - Primary)</option>
+                            <option value="eu-west-1">eu-west-1 (Ireland - Active Replica)</option>
+                            <option value="ap-southeast-1">ap-southeast-1 (Singapore - Edge)</option>
+                            <option value="global-mesh">Global Mesh (Active-Active Multi-Region)</option>
+                        </select>
+                    </div>
+
+                    <div class="topo-control-group">
+                        <label for="topoTrafficSlider" class="topo-label">Traffic Ingress Load: <span id="topoTrafficDisplay" class="topo-metric-highlight">1,450 req/sec</span></label>
+                        <input type="range" id="topoTrafficSlider" class="topo-slider" min="100" max="10000" step="100" value="1450">
+                    </div>
+
+                    <div class="topo-control-group">
+                        <span class="topo-label">Chaos &amp; Resilience Drills:</span>
+                        <div class="topo-drill-buttons">
+                            <button type="button" class="btn-secondary btn-sm topo-drill-btn" data-drill="db-failover" title="Simulate primary DB crash and automatic promotion of read replica">
+                                💥 DB Failover
+                            </button>
+                            <button type="button" class="btn-secondary btn-sm topo-drill-btn" data-drill="cdn-blackout" title="Simulate edge CDN blackout and reroute to direct origin">
+                                ⚡ CDN Blackout
+                            </button>
+                            <button type="button" class="btn-secondary btn-sm topo-drill-btn" data-drill="pod-oom" title="Inject memory spike triggering pod restart">
+                                🛑 Pod OOM Spike
+                            </button>
+                            <button type="button" id="topoResetHealthBtn" class="btn-ghost btn-sm" title="Restore all nodes to healthy status">
+                                🔄 Reset Healthy
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live Status Banner -->
+                <div id="topoStatusBanner" class="topo-status-banner banner-healthy">
+                    <div class="status-pulse-dot"></div>
+                    <div class="topo-banner-text">
+                        <strong id="topoBannerTitle">All Topology Systems Operational</strong> &bull;
+                        <span id="topoBannerSubtitle">Global edge latency 14ms &bull; Zero dropped packets &bull; Multi-AZ Aurora healthy</span>
+                    </div>
+                </div>
+
+                <!-- Interactive SVG Topology Canvas -->
+                <div class="topology-canvas-wrapper" id="topologyCanvasContainer">
+                    <svg class="topology-svg" viewBox="0 0 1100 520" preserveAspectRatio="xMidYMid meet" id="topoNetworkSvg">
+                        <defs>
+                            <linearGradient id="flowGradHealthy" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" stop-color="var(--accent-primary)" stop-opacity="0.8"/>
+                                <stop offset="100%" stop-color="#10b981" stop-opacity="0.9"/>
+                            </linearGradient>
+                            <linearGradient id="flowGradDegraded" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.8"/>
+                                <stop offset="100%" stop-color="#ef4444" stop-opacity="0.9"/>
+                            </linearGradient>
+                        </defs>
+
+                        <!-- Connector Lines (Animated Packets) -->
+                        <g class="topology-links" id="topoLinksGroup">
+                            <line x1="80" y1="260" x2="190" y2="260" class="topo-wire wire-active" id="wire-clients-cdn"/>
+                            <path d="M 270 260 C 310 260, 310 260, 350 260" class="topo-wire wire-active" id="wire-cdn-alb"/>
+                            <path d="M 430 260 C 470 260, 470 260, 510 260" class="topo-wire wire-active" id="wire-alb-gateway"/>
+                            <path d="M 590 260 C 630 260, 630 140, 670 140" class="topo-wire wire-active" id="wire-gw-auth"/>
+                            <path d="M 590 260 C 630 260, 630 260, 670 260" class="topo-wire wire-active" id="wire-gw-checkout"/>
+                            <path d="M 590 260 C 630 260, 630 380, 670 380" class="topo-wire wire-active" id="wire-gw-worker"/>
+                            <path d="M 750 140 C 790 140, 810 140, 850 140" class="topo-wire wire-active" id="wire-auth-redis"/>
+                            <path d="M 750 260 C 790 260, 810 260, 850 260" class="topo-wire wire-active" id="wire-checkout-db"/>
+                            <path d="M 750 380 C 790 380, 810 380, 850 380" class="topo-wire wire-active" id="wire-worker-kafka"/>
+                            <path d="M 930 260 C 970 260, 970 360, 970 380" class="topo-wire wire-active" id="wire-db-replica"/>
+                            <path d="M 930 380 C 970 380, 970 180, 970 140" class="topo-wire wire-active" id="wire-kafka-s3"/>
+                        </g>
+                    </svg>
+
+                    <!-- Interactive HTML Node Badges Overlay (Clickable) -->
+                    <div class="topology-nodes-overlay">
+                        <!-- Node: Internet Clients -->
+                        <div class="topo-node-card" style="left: 2%; top: 40%;" data-node="clients">
+                            <div class="topo-node-header">
+                                <span class="topo-node-icon">🌍</span>
+                                <span class="topo-node-status-dot status-ok"></span>
+                            </div>
+                            <div class="topo-node-title">Public Ingress</div>
+                            <div class="topo-node-sub">1.45k rps &bull; Clients</div>
+                        </div>
+
+                        <!-- Node: Cloudflare CDN & WAF -->
+                        <div class="topo-node-card" style="left: 17%; top: 40%;" data-node="cdn">
+                            <div class="topo-node-header">
+                                <span class="topo-node-icon">🛡️</span>
+                                <span class="topo-node-status-dot status-ok" id="status-cdn"></span>
+                            </div>
+                            <div class="topo-node-title">Edge CDN &amp; WAF</div>
+                            <div class="topo-node-sub">Cloudflare &bull; Anycast</div>
+                        </div>
+
+                        <!-- Node: AWS Application Load Balancer -->
+                        <div class="topo-node-card" style="left: 32%; top: 40%;" data-node="alb">
+                            <div class="topo-node-header">
+                                <span class="topo-node-icon">⚖️</span>
+                                <span class="topo-node-status-dot status-ok" id="status-alb"></span>
+                            </div>
+                            <div class="topo-node-title">AWS ALB</div>
+                            <div class="topo-node-sub">TLS 1.3 &bull; Target Group</div>
+                        </div>
+
+                        <!-- Node: Envoy / Ingress Gateway -->
+                        <div class="topo-node-card" style="left: 47%; top: 40%;" data-node="gateway">
+                            <div class="topo-node-header">
+                                <span class="topo-node-icon">🚪</span>
+                                <span class="topo-node-status-dot status-ok" id="status-gateway"></span>
+                            </div>
+                            <div class="topo-node-title">Envoy Gateway</div>
+                            <div class="topo-node-sub">Rate Limit &bull; JWT Auth</div>
+                        </div>
+
+                        <!-- Node: Auth Pods -->
+                        <div class="topo-node-card" style="left: 61%; top: 16%;" data-node="svc-auth">
+                            <div class="topo-node-header">
+                                <span class="topo-node-icon">🔑</span>
+                                <span class="topo-node-status-dot status-ok" id="status-auth"></span>
+                            </div>
+                            <div class="topo-node-title">auth-service</div>
+                            <div class="topo-node-sub">4 Pods &bull; Go/gRPC</div>
+                        </div>
+
+                        <!-- Node: Checkout Pods -->
+                        <div class="topo-node-card" style="left: 61%; top: 40%;" data-node="svc-checkout">
+                            <div class="topo-node-header">
+                                <span class="topo-node-icon">🛒</span>
+                                <span class="topo-node-status-dot status-ok" id="status-checkout"></span>
+                            </div>
+                            <div class="topo-node-title">checkout-api</div>
+                            <div class="topo-node-sub">6 Pods &bull; Node.js</div>
+                        </div>
+
+                        <!-- Node: Background Workers -->
+                        <div class="topo-node-card" style="left: 61%; top: 64%;" data-node="svc-worker">
+                            <div class="topo-node-header">
+                                <span class="topo-node-icon">⚙️</span>
+                                <span class="topo-node-status-dot status-ok" id="status-worker"></span>
+                            </div>
+                            <div class="topo-node-title">event-worker</div>
+                            <div class="topo-node-sub">3 Pods &bull; Python/Celery</div>
+                        </div>
+
+                        <!-- Node: Redis Cache -->
+                        <div class="topo-node-card" style="left: 77%; top: 16%;" data-node="redis">
+                            <div class="topo-node-header">
+                                <span class="topo-node-icon">⚡</span>
+                                <span class="topo-node-status-dot status-ok" id="status-redis"></span>
+                            </div>
+                            <div class="topo-node-title">Redis Cluster</div>
+                            <div class="topo-node-sub">0.8ms &bull; 99.2% Hit</div>
+                        </div>
+
+                        <!-- Node: Aurora PostgreSQL Primary -->
+                        <div class="topo-node-card" style="left: 77%; top: 40%;" data-node="db-primary">
+                            <div class="topo-node-header">
+                                <span class="topo-node-icon">🗄️</span>
+                                <span class="topo-node-status-dot status-ok" id="status-db"></span>
+                            </div>
+                            <div class="topo-node-title">Aurora Primary</div>
+                            <div class="topo-node-sub">PostgreSQL 16 &bull; Multi-AZ</div>
+                        </div>
+
+                        <!-- Node: Kafka Event Bus -->
+                        <div class="topo-node-card" style="left: 77%; top: 64%;" data-node="kafka">
+                            <div class="topo-node-header">
+                                <span class="topo-node-icon">📬</span>
+                                <span class="topo-node-status-dot status-ok" id="status-kafka"></span>
+                            </div>
+                            <div class="topo-node-title">Kafka Stream</div>
+                            <div class="topo-node-sub">3 Brokers &bull; 14 Topics</div>
+                        </div>
+
+                        <!-- Node: S3 Object Storage -->
+                        <div class="topo-node-card" style="left: 89%; top: 16%;" data-node="s3">
+                            <div class="topo-node-header">
+                                <span class="topo-node-icon">🪣</span>
+                                <span class="topo-node-status-dot status-ok" id="status-s3"></span>
+                            </div>
+                            <div class="topo-node-title">S3 Data Lake</div>
+                            <div class="topo-node-sub">KMS AES-256 &bull; Cold Tier</div>
+                        </div>
+
+                        <!-- Node: Aurora Read Replica -->
+                        <div class="topo-node-card" style="left: 89%; top: 64%;" data-node="db-replica">
+                            <div class="topo-node-header">
+                                <span class="topo-node-icon">📖</span>
+                                <span class="topo-node-status-dot status-ok" id="status-replica"></span>
+                            </div>
+                            <div class="topo-node-title">Read Replica</div>
+                            <div class="topo-node-sub">Lag 12ms &bull; Auto-Promote</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="topology-hint">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                    <span>Click any node in the canvas above to open the <strong>Live Node Diagnostics &amp; Kubernetes YAML Inspector</strong>.</span>
+                </div>
+            </section>
+        </div>
+
+        <!-- ========================================================================= -->
+        <!-- PAGE 9: SRE Incident War Room & Observability Suite                       -->
+        <!-- ========================================================================= -->
+        <div id="page-observability" class="feature-page">
+            <section id="sre-war-room" class="section-block">
+                <div class="section-header">
+                    <div class="section-tag">Observability &amp; Reliability</div>
+                    <h2 class="section-title">SRE Incident War Room &amp; Golden Signals</h2>
+                    <p class="section-desc">
+                        Real-time site reliability engineering platform. Monitor Google SRE Golden Signals (Throughput, Latency, Errors, Saturation), diagnose active production outage drills with live stdout/stderr container logs, execute one-click automated remediations, and generate instant Post-Mortem RCA documents.
+                    </p>
+                </div>
+
+                <!-- Golden Signals Telemetry Row -->
+                <div class="golden-signals-grid">
+                    <div class="telemetry-stat-card" id="card-traffic">
+                        <div class="stat-top">
+                            <span class="stat-name">Throughput (Traffic)</span>
+                            <span class="stat-pill pill-green" id="obsThroughputTrend">+5.2%</span>
+                        </div>
+                        <div class="stat-main">
+                            <span class="stat-value" id="obsThroughputVal">2,480</span>
+                            <span class="stat-unit">req/sec</span>
+                        </div>
+                        <div class="stat-bar-track">
+                            <div class="stat-bar-fill bar-fill-blue" id="obsThroughputBar" style="width: 62%;"></div>
+                        </div>
+                        <div class="stat-footer-text">Peak capacity: 4,000 req/sec</div>
+                    </div>
+
+                    <div class="telemetry-stat-card" id="card-latency">
+                        <div class="stat-top">
+                            <span class="stat-name">P99 Latency (Speed)</span>
+                            <span class="stat-pill pill-green" id="obsLatencyPill">Nominal</span>
+                        </div>
+                        <div class="stat-main">
+                            <span class="stat-value" id="obsLatencyVal">38</span>
+                            <span class="stat-unit">ms</span>
+                        </div>
+                        <div class="stat-bar-track">
+                            <div class="stat-bar-fill bar-fill-green" id="obsLatencyBar" style="width: 25%;"></div>
+                        </div>
+                        <div class="stat-footer-text">SLA Threshold: &lt; 150 ms</div>
+                    </div>
+
+                    <div class="telemetry-stat-card" id="card-errors">
+                        <div class="stat-top">
+                            <span class="stat-name">Error Rate (5xx)</span>
+                            <span class="stat-pill pill-green" id="obsErrorPill">0.02%</span>
+                        </div>
+                        <div class="stat-main">
+                            <span class="stat-value" id="obsErrorVal">0.02</span>
+                            <span class="stat-unit">%</span>
+                        </div>
+                        <div class="stat-bar-track">
+                            <div class="stat-bar-fill bar-fill-emerald" id="obsErrorBar" style="width: 4%;"></div>
+                        </div>
+                        <div class="stat-footer-text">Alert Threshold: &gt; 1.00%</div>
+                    </div>
+
+                    <div class="telemetry-stat-card" id="card-slo">
+                        <div class="stat-top">
+                            <span class="stat-name">SLO Error Budget (30d)</span>
+                            <span class="stat-pill pill-blue">99.98% / 99.95%</span>
+                        </div>
+                        <div class="stat-main">
+                            <span class="stat-value" id="obsSloVal">94.6</span>
+                            <span class="stat-unit">% left</span>
+                        </div>
+                        <div class="stat-bar-track">
+                            <div class="stat-bar-fill bar-fill-purple" id="obsSloBar" style="width: 94%;"></div>
+                        </div>
+                        <div class="stat-footer-text">Burn Rate: 0.12x (Healthy)</div>
+                    </div>
+                </div>
+
+                <!-- Incident Selector Tabs -->
+                <div class="war-room-selector">
+                    <div class="war-room-nav-title">Active SRE Outage Drills:</div>
+                    <div class="war-room-tabs" id="incidentTabsContainer">
+                        <button type="button" class="war-tab active" data-incident="oom">
+                            <span class="tab-badge badge-red">CRITICAL P1</span>
+                            <span class="tab-title">#INC-4091: Pod OOMKilled CrashLoop</span>
+                        </button>
+                        <button type="button" class="war-tab" data-incident="502">
+                            <span class="tab-badge badge-amber">MAJOR P2</span>
+                            <span class="tab-title">#INC-3882: Nginx 502 Bad Gateway</span>
+                        </button>
+                        <button type="button" class="war-tab" data-incident="tls">
+                            <span class="tab-badge badge-red">CRITICAL P1</span>
+                            <span class="tab-title">#INC-5104: Expired TLS Wildcard Cert</span>
+                        </button>
+                        <button type="button" class="war-tab" data-incident="ddos">
+                            <span class="tab-badge badge-amber">HIGH P2</span>
+                            <span class="tab-title">#INC-6219: L7 SYN &amp; HTTP Flood Surge</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Live Incident War Room Console -->
+                <div class="incident-console-box">
+                    <!-- Incident Header Banner -->
+                    <div class="incident-header-banner" id="incidentBanner">
+                        <div class="incident-badge-row">
+                            <span class="incident-severity-badge severity-critical" id="incidentSeverityBadge">CRITICAL P1</span>
+                            <span class="incident-id-text" id="incidentIdText">INC-4091</span>
+                            <span class="incident-time-text">Triggered: <span id="incidentTimestamp">2 mins ago</span></span>
+                        </div>
+                        <h3 class="incident-headline" id="incidentHeadline">Checkout API Pod OOMKilled (Exit Code 137)</h3>
+                        <div class="incident-meta-details">
+                            <span><strong>Target:</strong> <code id="incidentTarget">production/checkout-api-7b8f9</code></span> &bull;
+                            <span><strong>Commander:</strong> <code id="incidentCommander">Alex Mercer (SRE On-Call)</code></span> &bull;
+                            <span><strong>Impact:</strong> <span id="incidentImpact" class="text-danger">Payment conversion dropped 38%</span></span>
+                        </div>
+                    </div>
+
+                    <!-- Split Console: Logs & Remediation -->
+                    <div class="war-room-split-layout">
+                        <!-- Left: Live Log Streamer -->
+                        <div class="war-room-log-col">
+                            <div class="log-toolbar">
+                                <div class="log-toolbar-left">
+                                    <span class="log-dot-pulse"></span>
+                                    <span class="log-title">Live Container Log Tail (stdout / stderr)</span>
+                                </div>
+                                <div class="log-toolbar-right">
+                                    <input type="text" id="logFilterInput" class="log-filter-input" placeholder="Filter logs (e.g. fatal, 502)...">
+                                    <button type="button" id="toggleLogStreamBtn" class="btn-ghost btn-xs">Pause Stream</button>
+                                    <button type="button" id="clearLogStreamBtn" class="btn-ghost btn-xs">Clear</button>
+                                </div>
+                            </div>
+                            <div class="log-terminal-output" id="warRoomLogStream" role="log" aria-live="polite">
+                                <!-- Streamed via script.js -->
+                            </div>
+                        </div>
+
+                        <!-- Right: Remediation Playbook -->
+                        <div class="war-room-action-col">
+                            <div class="playbook-box">
+                                <div class="playbook-header">
+                                    <h4 class="playbook-title">Automated Remediation Playbook</h4>
+                                    <span class="playbook-status-pill" id="playbookStatus">Awaiting Execution</span>
+                                </div>
+                                <p class="playbook-desc" id="playbookDesc">
+                                    The Linux kernel OOM killer terminated the checkout pod after exceeding the 512Mi limit during a heap allocation surge. Select a remediation action:
+                                </p>
+
+                                <div class="playbook-buttons" id="playbookActionsContainer">
+                                    <!-- Dynamic Action Buttons populated via script.js -->
+                                </div>
+
+                                <div class="playbook-terminal" id="remediationOutputTerminal">
+                                    <div class="terminal-titlebar">Remediation Execution Output:</div>
+                                    <pre class="terminal-code" id="remediationCode">// Select an automated remediation action above to execute SRE runbook commands...</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Post-Mortem & Root Cause Analysis Section -->
+                <div class="post-mortem-wrapper">
+                    <div class="post-mortem-header">
+                        <div>
+                            <h3 class="post-mortem-title">Automated SRE Post-Mortem &amp; RCA Generator</h3>
+                            <p class="post-mortem-subtitle">Generates blameless enterprise incident post-mortems following Google SRE best practices with root cause analysis, detection timeline, and corrective actions.</p>
+                        </div>
+                        <div class="post-mortem-actions">
+                            <button type="button" id="generateRcaBtn" class="btn-primary btn-sm">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                                <span>Generate RCA Post-Mortem</span>
+                            </button>
+                            <button type="button" id="copyRcaBtn" class="btn-secondary btn-sm" disabled>
+                                <span>Copy Markdown</span>
+                            </button>
+                            <button type="button" id="downloadRcaBtn" class="btn-secondary btn-sm" disabled>
+                                <span>Download .md</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="post-mortem-preview" id="postMortemContainer">
+                        <pre class="rca-output" id="rcaOutputCode">Click "Generate RCA Post-Mortem" to compile an executive blameless incident report for the currently selected outage scenario.</pre>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ========================================================================= -->
+        <!-- PAGE 10: FinOps Cloud Cost Estimator & Infracost Calculator               -->
+        <!-- ========================================================================= -->
+        <div id="page-finops" class="feature-page">
+            <section id="finops-calculator" class="section-block">
+                <div class="section-header">
+                    <div class="section-tag">Cloud Economics</div>
+                    <h2 class="section-title">FinOps Cloud Cost Estimator &amp; Infracost Studio</h2>
+                    <p class="section-desc">
+                        Accurately project and optimize your infrastructure budget across Amazon Web Services, Google Cloud, and Microsoft Azure. Analyze ARM64 vs x86 performance-per-dollar, commitment discounts, and run automated 1-click FinOps cost audits.
+                    </p>
+                </div>
+
+                <!-- FinOps Main Grid -->
+                <div class="finops-layout-grid">
+                    <!-- Left Column: Interactive Cloud Configurator -->
+                    <div class="finops-config-card">
+                        <h3 class="config-card-title">Cloud Infrastructure Parameters</h3>
+
+                        <!-- Provider Switcher -->
+                        <div class="finops-param-group">
+                            <label class="param-label">Target Cloud Provider:</label>
+                            <div class="provider-pill-selector" id="finopsProviderGroup">
+                                <button type="button" class="provider-pill active" data-provider="aws">
+                                    <span class="provider-dot aws-dot"></span> Amazon Web Services
+                                </button>
+                                <button type="button" class="provider-pill" data-provider="gcp">
+                                    <span class="provider-dot gcp-dot"></span> Google Cloud
+                                </button>
+                                <button type="button" class="provider-pill" data-provider="azure">
+                                    <span class="provider-dot azure-dot"></span> Microsoft Azure
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- CPU Architecture Toggle -->
+                        <div class="finops-param-group">
+                            <label class="param-label">CPU Architecture (Silicon):</label>
+                            <div class="arch-toggle-row">
+                                <label class="radio-chip">
+                                    <input type="radio" name="finopsArch" value="x86" checked>
+                                    <span>x86_64 (Intel Xeon / AMD EPYC)</span>
+                                </label>
+                                <label class="radio-chip">
+                                    <input type="radio" name="finopsArch" value="arm64">
+                                    <span>ARM64 (AWS Graviton3 / GCP Tau - 20% Cheaper)</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Commitment Model -->
+                        <div class="finops-param-group">
+                            <label for="finopsCommitmentSelect" class="param-label">Commitment &amp; Pricing Model:</label>
+                            <select id="finopsCommitmentSelect" class="form-select">
+                                <option value="ondemand" selected>On-Demand (Pay-as-you-go - 0% discount)</option>
+                                <option value="savings1yr">1-Year Compute Savings Plan (38% discount)</option>
+                                <option value="savings3yr">3-Year Compute Savings Plan (58% discount)</option>
+                                <option value="spot">Spot / Preemptible Workloads (72% discount)</option>
+                            </select>
+                        </div>
+
+                        <!-- Sliders -->
+                        <div class="finops-param-group">
+                            <div class="slider-header-row">
+                                <label for="sliderNodes" class="param-label">Kubernetes Worker Nodes:</label>
+                                <span class="slider-val-badge" id="valNodes">6 Nodes</span>
+                            </div>
+                            <input type="range" id="sliderNodes" class="finops-range" min="2" max="48" step="1" value="6">
+                            <div class="slider-subtext">c6g.xlarge / 4 vCPU, 8 GB RAM per worker node</div>
+                        </div>
+
+                        <div class="finops-param-group">
+                            <div class="slider-header-row">
+                                <label for="sliderStorage" class="param-label">Cloud Block Storage (SSD gp3):</label>
+                                <span class="slider-val-badge" id="valStorage">500 GB</span>
+                            </div>
+                            <input type="range" id="sliderStorage" class="finops-range" min="50" max="5000" step="50" value="500">
+                            <div class="slider-subtext">General Purpose SSD with 3,000 IOPS and 125 MB/s baseline</div>
+                        </div>
+
+                        <div class="finops-param-group">
+                            <div class="slider-header-row">
+                                <label for="sliderEgress" class="param-label">Monthly Internet Data Egress:</label>
+                                <span class="slider-val-badge" id="valEgress">2,500 GB</span>
+                            </div>
+                            <input type="range" id="sliderEgress" class="finops-range" min="100" max="25000" step="100" value="2500">
+                            <div class="slider-subtext">Outbound network egress to public Internet &amp; multi-cloud</div>
+                        </div>
+
+                        <div class="finops-param-group">
+                            <label for="finopsDbSelect" class="param-label">Relational Database Engine Tier:</label>
+                            <select id="finopsDbSelect" class="form-select">
+                                <option value="single">Single-AZ Instance (Dev/Test - db.r6g.large)</option>
+                                <option value="multiaz" selected>Multi-AZ High Availability (Prod - db.r6g.xlarge)</option>
+                                <option value="aurora">Amazon Aurora Serverless v2 (Auto-scaling ACUs)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Cost Breakdown & Optimization Engine -->
+                    <div class="finops-summary-card">
+                        <div class="summary-top-row">
+                            <span class="summary-label">Estimated Monthly Cloud Spend</span>
+                            <span class="summary-currency">USD / month</span>
+                        </div>
+
+                        <div class="summary-hero-price">
+                            <span class="currency-symbol">$</span>
+                            <span class="price-digits" id="finopsTotalPrice">1,248.50</span>
+                            <span class="price-period">/ mo</span>
+                        </div>
+
+                        <div class="summary-annual-sub">
+                            Annual Run Rate: <strong id="finopsAnnualPrice">$14,982.00 / year</strong>
+                        </div>
+
+                        <!-- Itemized Breakdown Table -->
+                        <div class="finops-itemized-list">
+                            <div class="cost-item-row">
+                                <span class="item-name">Compute (Worker Nodes):</span>
+                                <span class="item-val" id="costCompute">$604.80</span>
+                            </div>
+                            <div class="cost-item-row">
+                                <span class="item-name">Managed Kubernetes (EKS/GKE):</span>
+                                <span class="item-val" id="costK8sFee">$73.00</span>
+                            </div>
+                            <div class="cost-item-row">
+                                <span class="item-name">Persistent Storage (EBS gp3):</span>
+                                <span class="item-val" id="costStorage">$40.00</span>
+                            </div>
+                            <div class="cost-item-row">
+                                <span class="item-name">Network Data Egress:</span>
+                                <span class="item-val" id="costEgress">$225.00</span>
+                            </div>
+                            <div class="cost-item-row">
+                                <span class="item-name">Managed Database (RDS/CloudSQL):</span>
+                                <span class="item-val" id="costDatabase">$305.70</span>
+                            </div>
+                        </div>
+
+                        <!-- FinOps Automated Audit Box -->
+                        <div class="finops-audit-box">
+                            <div class="audit-box-header">
+                                <div class="audit-title-wrap">
+                                    <span class="audit-icon">💡</span>
+                                    <h4 class="audit-box-title">FinOps Waste Detection Audit</h4>
+                                </div>
+                                <button type="button" id="runFinOpsAuditBtn" class="btn-secondary btn-xs">Scan Optimization</button>
+                            </div>
+
+                            <div class="audit-recs-list" id="finopsRecsContainer">
+                                <div class="rec-item">
+                                    <div class="rec-bullet-text">
+                                        <strong>Migrate to ARM64 Graviton3:</strong> Immediate 20% discount on worker node vCPUs with 15% higher compute performance.
+                                    </div>
+                                    <span class="rec-savings-badge">Save $121/mo</span>
+                                </div>
+                                <div class="rec-item">
+                                    <div class="rec-bullet-text">
+                                        <strong>Commit to 1-Yr Savings Plan:</strong> Lock in steady state pods to cut on-demand premium.
+                                    </div>
+                                    <span class="rec-savings-badge">Save $230/mo</span>
+                                </div>
+                                <div class="rec-item">
+                                    <div class="rec-bullet-text">
+                                        <strong>Enable CloudFront Edge Caching:</strong> Cache static API assets to reduce Internet egress bytes by 65%.
+                                    </div>
+                                    <span class="rec-savings-badge">Save $146/mo</span>
+                                </div>
+                            </div>
+
+                            <div class="audit-cta-row">
+                                <button type="button" id="applyFinOpsSavingsBtn" class="btn-primary btn-sm btn-block">
+                                    ⚡ Apply All 3 Optimizations (Save $497/mo)
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ========================================================================= -->
+        <!-- PAGE 11: Interactive Kubernetes Cluster & Pod Inspector (K9s / Lens)       -->
+        <!-- ========================================================================= -->
+        <div id="page-k8s" class="feature-page">
+            <section id="k8s-inspector" class="section-block">
+                <div class="section-header">
+                    <div class="section-tag">Container Orchestration</div>
+                    <h2 class="section-title">Interactive Kubernetes Cluster &amp; Pod Lens</h2>
+                    <p class="section-desc">
+                        Full-featured web-native K9s and Lens inspection environment. Filter across namespaces, inspect pod lifecycle events and restart loops, stream container stdout/stderr logs, inspect YAML manifests, and test dynamic replica scaling.
+                    </p>
+                </div>
+
+                <!-- Cluster Ribbon -->
+                <div class="k8s-cluster-ribbon">
+                    <div class="ribbon-col">
+                        <span class="ribbon-label">Cluster Context:</span>
+                        <span class="ribbon-val">arn:aws:eks:us-east-1:prod-eks-cluster-01</span>
+                    </div>
+                    <div class="ribbon-col">
+                        <span class="ribbon-label">Kubernetes Version:</span>
+                        <span class="ribbon-val">v1.29.3-eks</span>
+                    </div>
+                    <div class="ribbon-col">
+                        <span class="ribbon-label">Nodes:</span>
+                        <span class="ribbon-val text-success">6 Ready / 0 NotReady</span>
+                    </div>
+                    <div class="ribbon-col">
+                        <span class="ribbon-label">Pods Health:</span>
+                        <span class="ribbon-val" id="k8sPodCountSummary">28 Running / 1 Warning</span>
+                    </div>
+                    <div class="ribbon-col">
+                        <span class="ribbon-label">CPU / RAM Allocation:</span>
+                        <span class="ribbon-val">68% CPU &bull; 74% Mem</span>
+                    </div>
+                </div>
+
+                <!-- Controls & Namespace Filters -->
+                <div class="k8s-toolbar">
+                    <div class="k8s-namespace-pills" id="k8sNamespaceFilter">
+                        <button type="button" class="ns-pill active" data-ns="all">All Namespaces</button>
+                        <button type="button" class="ns-pill" data-ns="production">production (16)</button>
+                        <button type="button" class="ns-pill" data-ns="ingress-nginx">ingress-nginx (4)</button>
+                        <button type="button" class="ns-pill" data-ns="monitoring">monitoring (6)</button>
+                        <button type="button" class="ns-pill" data-ns="kube-system">kube-system (3)</button>
+                    </div>
+
+                    <div class="k8s-actions-right">
+                        <button type="button" id="k8sRefreshBtn" class="btn-ghost btn-sm" title="Refresh Pod State">
+                            🔄 Refresh
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Pod Table Container -->
+                <div class="k8s-table-wrapper">
+                    <table class="k8s-table" id="k8sPodTable">
+                        <thead>
+                            <tr>
+                                <th>Pod Name</th>
+                                <th>Namespace</th>
+                                <th>Status</th>
+                                <th>Restarts</th>
+                                <th>Age</th>
+                                <th>CPU</th>
+                                <th>Memory</th>
+                                <th>Quick Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="k8sPodTableBody">
+                            <!-- Populated dynamically via script.js -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Split Panel: Live Pod Inspector Drawer & Scaler -->
+                <div class="k8s-lower-grid">
+                    <!-- Drawer: Logs & YAML -->
+                    <div class="k8s-inspector-card">
+                        <div class="inspector-card-header">
+                            <div class="inspector-header-left">
+                                <span class="active-pod-pill" id="k8sSelectedPodBadge">production/checkout-api-7b8f9</span>
+                                <span class="inspector-tab-group">
+                                    <button type="button" class="ins-tab active" data-tab="logs">Pod Logs</button>
+                                    <button type="button" class="ins-tab" data-tab="describe">Describe &amp; Events</button>
+                                    <button type="button" class="ins-tab" data-tab="yaml">YAML Manifest</button>
+                                </span>
+                            </div>
+                            <button type="button" id="k8sCopyManifestBtn" class="btn-ghost btn-xs">Copy</button>
+                        </div>
+
+                        <div class="inspector-content-pane">
+                            <pre class="k8s-log-console" id="k8sConsoleOutput">// Click any pod action above or select a tab to stream logs or inspect manifest...</pre>
+                        </div>
+                    </div>
+
+                    <!-- Deployment Replica Autoscaler -->
+                    <div class="k8s-scaler-card">
+                        <h4 class="scaler-card-title">Deployment Replica Autoscaler</h4>
+                        <p class="scaler-card-desc">
+                            Adjust target replica count for <code>production/checkout-api</code>. The Kubernetes ReplicaSet controller will initiate rolling scale operations:
+                        </p>
+
+                        <div class="scaler-control-group">
+                            <div class="scaler-val-display">
+                                <span>Target Replicas:</span>
+                                <strong id="k8sReplicaCountDisplay" class="scaler-num">4 Pods</strong>
+                            </div>
+                            <input type="range" id="k8sReplicaSlider" class="finops-range" min="1" max="10" step="1" value="4">
+                        </div>
+
+                        <div class="scaler-actions">
+                            <button type="button" id="k8sApplyScaleBtn" class="btn-primary btn-sm btn-block">
+                                ⚡ Scale Deployment to Target
+                            </button>
+                        </div>
+
+                        <div class="scaler-events-log" id="k8sScaleEventsLog">
+                            <div class="scale-log-line text-muted">[System] HorizontalPodAutoscaler target CPU: 80%</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ========================================================================= -->
+        <!-- PAGE 12: Enterprise SOC 2, ISO 27001 & SBOM Compliance Suite              -->
+        <!-- ========================================================================= -->
+        <div id="page-compliance" class="feature-page">
+            <section id="compliance-studio" class="section-block">
+                <div class="section-header">
+                    <div class="section-tag">Enterprise Governance &amp; Security</div>
+                    <h2 class="section-title">SOC 2, ISO 27001 &amp; SBOM Compliance Suite</h2>
+                    <p class="section-desc">
+                        Audit cloud native infrastructure against commercial security standards. Verify SOC 2 Type II trust criteria, ISO/IEC 27001:2022 controls, and export compliant Software Bill of Materials (SBOM) in CycloneDX and SPDX standards.
+                    </p>
+                </div>
+
+                <!-- Compliance Scorecard Hero -->
+                <div class="compliance-scorecard-hero">
+                    <div class="scorecard-left">
+                        <div class="score-circle">
+                            <span class="score-grade">A+</span>
+                            <span class="score-percent">96.8%</span>
+                        </div>
+                        <div class="score-meta">
+                            <h3 class="score-title">Enterprise Audit Ready: SOC 2 Type II</h3>
+                            <p class="score-sub">All critical trust service criteria enforced. Zero high or critical unmitigated findings across infrastructure and CI/CD pipelines.</p>
+                        </div>
+                    </div>
+
+                    <div class="scorecard-right">
+                        <div class="audit-stat">
+                            <span class="audit-num text-success">31</span>
+                            <span class="audit-lbl">Controls Passed</span>
+                        </div>
+                        <div class="audit-stat">
+                            <span class="audit-num text-warning">1</span>
+                            <span class="audit-lbl">Under Review</span>
+                        </div>
+                        <div class="audit-stat">
+                            <span class="audit-num text-success">0</span>
+                            <span class="audit-lbl">Non-Conformances</span>
+                        </div>
+                        <button type="button" id="runComplianceAuditBtn" class="btn-primary btn-sm">
+                            🛡️ Run Full Audit
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Framework Selector Tabs -->
+                <div class="compliance-tabs-bar">
+                    <div class="compliance-tabs" id="complianceFrameworkTabs">
+                        <button type="button" class="comp-tab active" data-framework="soc2">SOC 2 Type II (Trust Services)</button>
+                        <button type="button" class="comp-tab" data-framework="iso27001">ISO/IEC 27001:2022</button>
+                        <button type="button" class="comp-tab" data-framework="nist">NIST SP 800-53 Rev 5</button>
+                        <button type="button" class="comp-tab" data-framework="cis">CIS Kubernetes v1.8</button>
+                    </div>
+                </div>
+
+                <!-- Controls Matrix Table -->
+                <div class="compliance-table-card">
+                    <div class="card-header-bar">
+                        <h4 class="card-bar-title" id="complianceMatrixTitle">SOC 2 Trust Services Criteria Controls Matrix</h4>
+                        <span class="card-bar-badge" id="complianceStatusBadge">31 / 32 Passed</span>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="compliance-table">
+                            <thead>
+                                <tr>
+                                    <th>Control ID</th>
+                                    <th>Domain &amp; Requirement</th>
+                                    <th>Automated Verification Evidence</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="complianceControlsBody">
+                                <!-- Populated via script.js -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Software Bill of Materials (SBOM) Generator -->
+                <div class="sbom-generator-card">
+                    <div class="sbom-header-row">
+                        <div>
+                            <h3 class="sbom-title">Software Bill of Materials (SBOM) Generator</h3>
+                            <p class="sbom-sub">Generate machine-readable supply chain manifests conforming to executive orders and enterprise procurement standards.</p>
+                        </div>
+                        <div class="sbom-format-pills">
+                            <button type="button" class="sbom-pill active" data-format="cyclonedx">CycloneDX v1.5 (JSON)</button>
+                            <button type="button" class="sbom-pill" data-format="spdx">SPDX v2.3 (JSON)</button>
+                        </div>
+                    </div>
+
+                    <div class="sbom-code-box">
+                        <div class="sbom-code-toolbar">
+                            <span class="sbom-filename" id="sbomFileName">bom.cyclonedx.json</span>
+                            <div class="sbom-btn-group">
+                                <button type="button" id="copySbomBtn" class="btn-ghost btn-xs">Copy JSON</button>
+                                <button type="button" id="downloadSbomBtn" class="btn-secondary btn-xs">Download SBOM (.json)</button>
+                                <button type="button" id="downloadAuditReportBtn" class="btn-primary btn-xs">Export SOC 2 Report (.md)</button>
+                            </div>
+                        </div>
+                        <pre class="sbom-output" id="sbomOutputCode"></pre>
+                    </div>
+                </div>
+            </section>
+        </div>
+
     </main>
 
-    <footer>
-        <p>Created while learning GitLab CI/CD</p>
+    <!-- Floating AI Quick Launcher Button -->
+    <button id="floatingAiToggleBtn" class="floating-ai-btn" aria-label="Open DevOps AI Copilot" title="Ask DevOps AI">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+        </svg>
+        <span class="floating-ai-badge">AI</span>
+    </button>
+
+    <!-- Modal for Gemini API Key Settings -->
+    <div id="aiSettingsModal" class="modal-backdrop" aria-hidden="true" role="dialog" aria-modal="true">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3 class="modal-title">DevOps AI Copilot Settings</h3>
+                <button id="closeAiSettingsBtn" class="modal-close-btn" aria-label="Close settings">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 1rem;">
+                    The platform includes a built-in intelligent DevOps reasoning engine that works 100% out-of-the-box offline. You can optionally connect directly to <strong>Google Gemini API</strong> by providing your free API key:
+                </p>
+                <div class="form-group" style="margin-bottom: 1.25rem;">
+                    <label for="geminiApiKeyInput" class="form-label">Google Gemini API Key (Optional):</label>
+                    <input type="password" id="geminiApiKeyInput" class="form-input" placeholder="AIzaSy...">
+                    <span style="font-size: 0.74rem; color: var(--text-muted); margin-top: 4px;">
+                        Stored only in your browser's localStorage. Never sent anywhere else.
+                    </span>
+                </div>
+                <div style="display: flex; justify-content: flex-end; gap: 0.5rem;">
+                    <button id="clearApiKeyBtn" class="btn-ghost btn-sm">Clear Key</button>
+                    <button id="saveApiKeyBtn" class="btn-primary btn-sm">Save &amp; Connect</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Command Palette (Cmd + K / Ctrl + K) -->
+    <div id="commandPaletteModal" class="modal-backdrop" aria-hidden="true" role="dialog" aria-modal="true">
+        <div class="cmd-palette-dialog">
+            <div class="cmd-palette-header">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <input type="text" id="cmdPaletteInput" class="cmd-palette-input" placeholder="Type a command, studio, or action (e.g. topology, OOM, finops, k8s, docker)..." autocomplete="off" spellcheck="false">
+                <button type="button" id="closeCmdPaletteBtn" class="cmd-close-btn" aria-label="Close Command Palette">&times;</button>
+            </div>
+            <div class="cmd-palette-results" id="cmdPaletteResults">
+                <!-- Populated dynamically via script.js -->
+            </div>
+            <div class="cmd-palette-footer">
+                <div class="cmd-hint-item"><kbd>↑</kbd> <kbd>↓</kbd> <span>Navigate</span></div>
+                <div class="cmd-hint-item"><kbd>↵</kbd> <span>Select</span></div>
+                <div class="cmd-hint-item"><kbd>esc</kbd> <span>Close</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Global System Status & SLA Modal -->
+    <div id="systemStatusModal" class="modal-backdrop" aria-hidden="true" role="dialog" aria-modal="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-header">
+                <div class="status-modal-title-row">
+                    <span class="status-dot-lg status-ok"></span>
+                    <h3 class="modal-title">Global Cloud Telemetry &amp; System Status</h3>
+                </div>
+                <button type="button" id="closeStatusModalBtn" class="modal-close-btn" aria-label="Close status modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="status-summary-bar">
+                    <div class="summary-headline">All Production Systems Operational</div>
+                    <div class="summary-uptime-badge">99.995% 90-Day SLA</div>
+                </div>
+
+                <div class="status-components-list">
+                    <div class="component-status-row">
+                        <span class="comp-name">Cloudflare Edge Anycast CDN &amp; WAF</span>
+                        <span class="comp-latency">12ms</span>
+                        <span class="comp-badge badge-green">Operational</span>
+                    </div>
+                    <div class="component-status-row">
+                        <span class="comp-name">AWS us-east-1 Application Ingress (ALB)</span>
+                        <span class="comp-latency">18ms</span>
+                        <span class="comp-badge badge-green">Operational</span>
+                    </div>
+                    <div class="component-status-row">
+                        <span class="comp-name">EKS Production Kubernetes Cluster (1.29)</span>
+                        <span class="comp-latency">24ms</span>
+                        <span class="comp-badge badge-green">Operational</span>
+                    </div>
+                    <div class="component-status-row">
+                        <span class="comp-name">Amazon Aurora PostgreSQL Multi-AZ Primary</span>
+                        <span class="comp-latency">4ms</span>
+                        <span class="comp-badge badge-green">Operational</span>
+                    </div>
+                    <div class="component-status-row">
+                        <span class="comp-name">Redis Enterprise Session &amp; Response Cache</span>
+                        <span class="comp-latency">0.8ms</span>
+                        <span class="comp-badge badge-green">Operational</span>
+                    </div>
+                    <div class="component-status-row">
+                        <span class="comp-name">OSV.dev Vulnerability Feeds &amp; DoH Resolver</span>
+                        <span class="comp-latency">98ms</span>
+                        <span class="comp-badge badge-green">Operational</span>
+                    </div>
+                </div>
+
+                <div class="status-history-section">
+                    <div class="history-label-row">
+                        <span>90-Day Uptime Reliability</span>
+                        <span>0 Outages Reported</span>
+                    </div>
+                    <div class="status-bars-strip">
+                        <div class="status-strip-segment ok" title="Day 1-3: 100%"></div>
+                        <div class="status-strip-segment ok" title="Day 4-6: 100%"></div>
+                        <div class="status-strip-segment ok" title="Day 7-9: 100%"></div>
+                        <div class="status-strip-segment ok" title="Day 10-12: 100%"></div>
+                        <div class="status-strip-segment ok" title="Day 13-15: 100%"></div>
+                        <div class="status-strip-segment ok" title="Day 16-18: 100%"></div>
+                        <div class="status-strip-segment ok" title="Day 19-21: 100%"></div>
+                        <div class="status-strip-segment ok" title="Day 22-24: 100%"></div>
+                        <div class="status-strip-segment ok" title="Day 25-27: 100%"></div>
+                        <div class="status-strip-segment ok" title="Day 28-30: 100%"></div>
+                        <div class="status-strip-segment ok" title="Day 31-33: 100%"></div>
+                        <div class="status-strip-segment ok" title="Day 34-36: 100%"></div>
+                        <div class="status-strip-segment ok" title="Day 37-39: 100%"></div>
+                        <div class="status-strip-segment ok" title="Day 40-42: 100%"></div>
+                        <div class="status-strip-segment ok" title="Day 43-45: 100%"></div>
+                        <div class="status-strip-segment ok" title="Day 46-48: 100%"></div>
+                        <div class="status-strip-segment ok" title="Day 49-51: 100%"></div>
+                        <div class="status-strip-segment ok" title="Day 52-54: 100%"></div>
+                        <div class="status-strip-segment ok" title="Day 55-57: 100%"></div>
+                        <div class="status-strip-segment ok" title="Day 58-60: 100%"></div>
+                        <div class="status-strip-segment ok" title="Day 61-63: 100%"></div>
+                        <div class="status-strip-segment ok" title="Day 64-66: 100%"></div>
+                        <div class="status-strip-segment ok" title="Day 67-69: 100%"></div>
+                        <div class="status-strip-segment ok" title="Day 70-72: 100%"></div>
+                        <div class="status-strip-segment ok" title="Day 73-75: 100%"></div>
+                        <div class="status-strip-segment ok" title="Day 76-78: 100%"></div>
+                        <div class="status-strip-segment ok" title="Day 79-81: 100%"></div>
+                        <div class="status-strip-segment ok" title="Day 82-84: 100%"></div>
+                        <div class="status-strip-segment ok" title="Day 85-87: 100%"></div>
+                        <div class="status-strip-segment ok" title="Day 88-90: 100%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Topology Node Inspector Modal -->
+    <div id="topologyNodeModal" class="modal-backdrop" aria-hidden="true" role="dialog" aria-modal="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-header">
+                <div class="node-modal-header-left">
+                    <span class="node-modal-icon" id="nodeModalIcon">🗄️</span>
+                    <div>
+                        <h3 class="modal-title" id="nodeModalTitle">Amazon Aurora PostgreSQL Primary</h3>
+                        <span class="node-modal-sub" id="nodeModalSubtitle">us-east-1a &bull; Multi-AZ Cluster</span>
+                    </div>
+                </div>
+                <button type="button" id="closeTopologyNodeBtn" class="modal-close-btn" aria-label="Close node details">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="node-metrics-grid">
+                    <div class="node-stat-pill">
+                        <span class="pill-lbl">Health:</span>
+                        <strong class="text-success" id="nodeModalHealth">Healthy (100%)</strong>
+                    </div>
+                    <div class="node-stat-pill">
+                        <span class="pill-lbl">Active Connections:</span>
+                        <strong id="nodeModalConn">142 conns</strong>
+                    </div>
+                    <div class="node-stat-pill">
+                        <span class="pill-lbl">CPU Utilization:</span>
+                        <strong id="nodeModalCpu">28% (4 vCPU)</strong>
+                    </div>
+                    <div class="node-stat-pill">
+                        <span class="pill-lbl">Memory Usage:</span>
+                        <strong id="nodeModalMemory">4.2 GB / 16 GB</strong>
+                    </div>
+                </div>
+
+                <div class="node-manifest-box">
+                    <div class="manifest-toolbar">
+                        <span>Production Specification &amp; Kubernetes YAML</span>
+                        <button type="button" id="copyNodeSpecBtn" class="btn-ghost btn-xs">Copy Spec</button>
+                    </div>
+                    <pre class="manifest-code" id="nodeModalYaml"></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+        <!-- Site Footer -->
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-brand-col">
+                <div class="brand-link">
+                    <div class="brand-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="3"></circle>
+                            <path d="M3 12h3m12 0h3M12 3v3m0 12v3"></path>
+                        </svg>
+                    </div>
+                    <span class="brand-title">DevOps Learning Platform</span>
+                </div>
+                <p class="footer-text">
+                    Hands-on cloud native engineering platform built by <strong>Jatin Dudhani</strong>. Connecting real-world public APIs to teach CI/CD, DevSecOps, Docker, and resilient cloud architectures from beginner to intermediate.
+                </p>
+            </div>
+
+            <div class="footer-meta-col">
+                <div class="footer-meta-item">
+                    <span class="meta-label">Version:</span>
+                    <span class="meta-val">3.0.0 (AI &amp; Interactive Tools)</span>
+                </div>
+                <div class="footer-meta-item">
+                    <span class="meta-label">Connected APIs:</span>
+                    <span class="meta-val">OSV.dev &bull; Google DoH &bull; GitLab &bull; GitHub &bull; Gemini</span>
+                </div>
+                <div class="footer-meta-item">
+                    <span class="meta-label">License:</span>
+                    <span class="meta-val">MIT Open Source</span>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Jatin Dudhani &bull; Built with modern, fluid, production-grade DevOps engineering.</p>
+        </div>
     </footer>
 
+    <!-- Application Script -->
     <script src="script.js"></script>
 </body>
 </html>

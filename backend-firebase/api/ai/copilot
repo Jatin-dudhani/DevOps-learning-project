@@ -1,0 +1,13 @@
+{
+  "status": "operational",
+  "models": [
+    "DevOps Local Knowledge Engine v3.0",
+    "Google Gemini 1.5 Flash"
+  ],
+  "capabilities": [
+    "Bash script security audit & hardening",
+    "Dockerfile multi-stage optimization",
+    "Nginx 502 Bad Gateway triage",
+    "CIDR subnet math & AWS VPC calculation"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "status": "success",
+  "scanner": "DevSecOps OSV.dev Continuous Advisory Engine",
+  "supportedEcosystems": [
+    "npm",
+    "PyPI",
+    "Go",
+    "Alpine",
+    "Debian",
+    "Maven",
+    "crates.io"
+  ],
+  "sampleVulnerability": {
+    "id": "GHSA-p6mc-m468-83gw",
+    "summary": "Prototype Pollution in lodash",
+    "details": "Versions of lodash before 4.17.21 are vulnerable to Prototype Pollution via zipObjectDeep.",
+    "cvss": 7.4,
+    "severity": "HIGH",
+    "remediation": "Upgrade lodash to >= 4.17.21"
+  }
+}

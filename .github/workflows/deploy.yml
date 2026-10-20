@@ -1,0 +1,60 @@
+name: Multi-Cloud CI/CD Pipeline (GitHub + Vercel + Firebase)
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate-and-build:
+    name: 🧪 Build & Test Suite
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Execute DevOps Build Pipeline
+        run: bash scripts/build.sh
+        env:
+          CI_COMMIT_SHORT_SHA: ${{ github.sha }}
+          CI_ENVIRONMENT_NAME: production
+          CI_PIPELINE_IID: ${{ github.run_id }}
+
+      - name: Run Quality & Security Test Assertions
+        run: bash scripts/test.sh
+
+      - name: Archive Built Web Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: devops-platform-public-dist
+          path: public/
+          retention-days: 7
+
+  verify-multi-cloud-deployment:
+    name: 🌐 Verify Vercel & Firebase Deployments
+    runs-on: ubuntu-latest
+    needs: validate-and-build
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Run Multi-Cloud Route & API Probes
+        run: |
+          chmod +x scripts/verify-deployments.sh
+          bash scripts/verify-deployments.sh
+        env:
+          VERCEL_PROD_URL: https://devops-learning-platform-indol.vercel.app
+          FIREBASE_PROD_URL: https://devops-platform-8f40a.web.app

@@ -1,0 +1,10 @@
+{
+  "status": "success",
+  "edgeLocation": "us-central1 (Council Bluffs, Iowa)",
+  "serverTime": "2026-10-20T21:00:00Z",
+  "network": {
+    "protocol": "HTTP/2 + TLS 1.3",
+    "cdnProvider": "Google Cloud Global Edge",
+    "egressLatencyMs": 14
+  }
+}
