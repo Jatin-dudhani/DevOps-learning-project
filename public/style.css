@@ -3296,8 +3296,16 @@ button, input, select, textarea {
     padding: 1.5rem;
 }
 
-.modal-backdrop.open {
+.modal-backdrop.open,
+.modal-backdrop.active {
     display: flex;
+}
+
+#commandPaletteModal.open,
+#commandPaletteModal.active {
+    display: flex;
+    align-items: flex-start;
+    padding-top: 8vh;
 }
 
 .modal-dialog {

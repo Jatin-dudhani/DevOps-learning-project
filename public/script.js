@@ -58,21 +58,26 @@
         const latencyEl = document.getElementById('telemetryLatency');
         const startTime = performance.now();
 
-        fetch('https://api.ipify.org?format=json')
-            .then(res => {
-                const rtt = Math.round(performance.now() - startTime);
-                if (latencyEl) latencyEl.textContent = `${rtt} ms`;
-                return res.json();
-            })
-            .then(data => {
-                if (ipEl && data && data.ip) {
-                    ipEl.textContent = `${data.ip} (IPv4)`;
-                }
-            })
-            .catch(() => {
-                if (ipEl) ipEl.textContent = '127.0.0.1 (Local Egress)';
-                if (latencyEl) latencyEl.textContent = '< 5 ms';
-            });
+        if (typeof fetch === 'function') {
+            fetch('https://api.ipify.org?format=json')
+                .then(res => {
+                    const rtt = Math.round(performance.now() - startTime);
+                    if (latencyEl) latencyEl.textContent = `${rtt} ms`;
+                    return res.json();
+                })
+                .then(data => {
+                    if (ipEl && data && data.ip) {
+                        ipEl.textContent = `${data.ip} (IPv4)`;
+                    }
+                })
+                .catch(() => {
+                    if (ipEl) ipEl.textContent = '127.0.0.1 (Local Egress)';
+                    if (latencyEl) latencyEl.textContent = '< 5 ms';
+                });
+        } else {
+            if (ipEl) ipEl.textContent = '127.0.0.1 (Local Egress)';
+            if (latencyEl) latencyEl.textContent = '< 5 ms';
+        }
     }
 
     // =========================================================================
@@ -1743,7 +1748,11 @@ volumes:
         if (searchInput) {
             searchInput.addEventListener('input', () => {
                 const query = searchInput.value.toLowerCase().trim();
-                const activeCat = document.querySelector('.cat-pill.active')?.getAttribute('data-category') || 'all';
+                let activeCat = document.querySelector('.cat-pill.active')?.getAttribute('data-category') || 'all';
+                if (query.length > 0 && activeCat !== 'all') {
+                    categoryPills.forEach(p => p.classList.toggle('active', p.getAttribute('data-category') === 'all'));
+                    activeCat = 'all';
+                }
                 renderCommands(activeCat, query);
             });
         }
@@ -1780,8 +1789,18 @@ volumes:
             grid.innerHTML = '';
             const emptyDiv = document.createElement('div');
             emptyDiv.style.cssText = 'grid-column: 1/-1; text-align: center; padding: 2rem; color: var(--text-muted);';
-            emptyDiv.textContent = `No matching CLI commands found for "${query}". Try another keyword.`;
+            emptyDiv.innerHTML = `
+                <p style="margin-bottom: 0.75rem;">No matching CLI commands found for "<strong>${escapeHtml(query)}</strong>".</p>
+                <button type="button" class="btn btn-secondary btn-sm" id="resetCheatSearchBtn">Clear Search</button>
+            `;
             grid.appendChild(emptyDiv);
+            document.getElementById('resetCheatSearchBtn')?.addEventListener('click', () => {
+                const sInput = document.getElementById('cheatSearchInput');
+                if (sInput) sInput.value = '';
+                const cPills = document.querySelectorAll('.cat-pill');
+                cPills.forEach(p => p.classList.toggle('active', p.getAttribute('data-category') === 'all'));
+                renderCommands('all', '');
+            });
             return;
         }
 
@@ -4648,7 +4667,7 @@ mkdir -p .github/workflows k8s scripts terraform
         if (bridgeToTerminalBtn) {
             bridgeToTerminalBtn.addEventListener('click', () => {
                 const appName = appNameInput?.value || 'app-service';
-                const termInput = document.getElementById('cliTerminalInput');
+                const termInput = document.getElementById('cliPromptInput');
 
                 if (typeof switchPage === 'function') {
                     switchPage('page-terminal', 'terminal-sandbox');
@@ -4884,19 +4903,19 @@ mkdir -p .github/workflows k8s scripts terraform
         if (openStatusBtn && statusModal) {
             openStatusBtn.addEventListener('click', (e) => {
                 e.preventDefault();
-                statusModal.classList.add('active');
+                statusModal.classList.add('active', 'open');
                 statusModal.setAttribute('aria-hidden', 'false');
             });
         }
 
         if (closeStatusBtn && statusModal) {
             closeStatusBtn.addEventListener('click', () => {
-                statusModal.classList.remove('active');
+                statusModal.classList.remove('active', 'open');
                 statusModal.setAttribute('aria-hidden', 'true');
             });
             statusModal.addEventListener('click', (e) => {
                 if (e.target === statusModal) {
-                    statusModal.classList.remove('active');
+                    statusModal.classList.remove('active', 'open');
                     statusModal.setAttribute('aria-hidden', 'true');
                 }
             });
@@ -4927,33 +4946,33 @@ mkdir -p .github/workflows k8s scripts terraform
 
         const commandsList = [
             // Workspaces & Studios
-            { id: 'goto-hub', category: 'Workspaces', title: 'Open Hub (Platform Overview)', icon: '🏠', badge: 'Page', action: () => switchPage('page-hub') },
-            { id: 'goto-gen', category: 'Workspaces', title: 'Open Project Auto-DevOps Generator', icon: '⚡', badge: 'Studio', action: () => switchPage('page-generator', 'project-generator') },
-            { id: 'goto-topo', category: 'Workspaces', title: 'Open Cloud Architecture & Topology Visualizer', icon: '🌐', badge: 'Live Canvas', action: () => switchPage('page-topology', 'cloud-topology') },
-            { id: 'goto-obs', category: 'Workspaces', title: 'Open SRE Incident War Room & Telemetry', icon: '🚨', badge: 'War Room', action: () => switchPage('page-observability', 'sre-war-room') },
-            { id: 'goto-finops', category: 'Workspaces', title: 'Open FinOps Cloud Cost & Infracost', icon: '💰', badge: 'Calculator', action: () => switchPage('page-finops', 'finops-calculator') },
-            { id: 'goto-k8s', category: 'Workspaces', title: 'Open Kubernetes Cluster & Pod Lens', icon: '☸️', badge: 'K9s/Lens', action: () => switchPage('page-k8s', 'k8s-inspector') },
-            { id: 'goto-comp', category: 'Workspaces', title: 'Open SOC 2, ISO 27001 & SBOM Studio', icon: '🛡️', badge: 'Governance', action: () => switchPage('page-compliance', 'compliance-studio') },
-            { id: 'goto-insp', category: 'Workspaces', title: 'Open Script & Dockerfile Security Inspector', icon: '🔍', badge: 'SAST', action: () => switchPage('page-inspector', 'analyzer') },
-            { id: 'goto-ai', category: 'Workspaces', title: 'Open DevOps AI Copilot & Mentor', icon: '🤖', badge: 'AI Assistant', action: () => switchPage('page-ai', 'ai-assistant') },
-            { id: 'goto-term', category: 'Workspaces', title: 'Open Interactive CLI Sandbox Terminal', icon: '💻', badge: 'Linux Shell', action: () => switchPage('page-terminal', 'terminal-sandbox') },
-            { id: 'goto-net', category: 'Workspaces', title: 'Open Network Lab & DNS-over-HTTPS Resolver', icon: '📡', badge: 'Google DoH', action: () => switchPage('page-network', 'network') },
-            { id: 'goto-acad', category: 'Workspaces', title: 'Open Curriculum Modules & SRE Quiz', icon: '🎓', badge: 'Academy', action: () => switchPage('page-academy', 'academy') },
+            { id: 'goto-hub', category: 'Workspaces', title: 'Open Hub (Platform Overview)', icon: '🏠', badge: 'Page', keywords: ['home', 'overview', 'dashboard', 'hub', 'welcome', 'metrics', 'start'], action: () => switchPage('page-hub') },
+            { id: 'goto-gen', category: 'Workspaces', title: 'Open Project Auto-DevOps Generator', icon: '⚡', badge: 'Studio', keywords: ['generator', 'dockerfile', 'docker', 'compose', 'k8s', 'kubernetes', 'helm', 'ci', 'cd', 'pipeline', 'github actions', 'gitlab', 'automation', 'build', 'project', 'manifest'], action: () => switchPage('page-generator', 'project-generator') },
+            { id: 'goto-topo', category: 'Workspaces', title: 'Open Cloud Architecture & Topology Visualizer', icon: '🌐', badge: 'Live Canvas', keywords: ['topology', 'architecture', 'cloud', 'aws', 'gcp', 'azure', 'diagram', 'visualizer', 'network', 'vpc', 'rds', 'cluster', 'waf', 'ingress', 'alb', 'graph'], action: () => switchPage('page-topology', 'cloud-topology') },
+            { id: 'goto-obs', category: 'Workspaces', title: 'Open SRE Incident War Room & Telemetry', icon: '🚨', badge: 'War Room', keywords: ['observability', 'telemetry', 'sre', 'incident', 'war room', 'outage', 'drill', 'oom', '502', 'ddos', 'tls', 'prometheus', 'grafana', 'logs', 'metrics', 'alerts'], action: () => switchPage('page-observability', 'sre-war-room') },
+            { id: 'goto-finops', category: 'Workspaces', title: 'Open FinOps Cloud Cost & Infracost', icon: '💰', badge: 'Calculator', keywords: ['finops', 'cost', 'pricing', 'calculator', 'infracost', 'budget', 'waste', 'savings', 'aws', 'gcp', 'azure', 'cloud spend', 'estimate', 'bill'], action: () => switchPage('page-finops', 'finops-calculator') },
+            { id: 'goto-k8s', category: 'Workspaces', title: 'Open Kubernetes Cluster & Pod Lens', icon: '☸️', badge: 'K9s/Lens', keywords: ['kubernetes', 'k8s', 'cluster', 'lens', 'k9s', 'pod', 'deployment', 'namespace', 'service', 'nodes', 'kubectl', 'crashloopbackoff', 'oomkilled'], action: () => switchPage('page-k8s', 'k8s-inspector') },
+            { id: 'goto-comp', category: 'Workspaces', title: 'Open SOC 2, ISO 27001 & SBOM Studio', icon: '🛡️', badge: 'Governance', keywords: ['compliance', 'security', 'soc2', 'iso27001', 'hipaa', 'sbom', 'cyclonedx', 'cve', 'vulnerabilities', 'governance', 'audit'], action: () => switchPage('page-compliance', 'compliance-studio') },
+            { id: 'goto-insp', category: 'Workspaces', title: 'Open Script & Dockerfile Security Inspector', icon: '🔍', badge: 'SAST', keywords: ['inspector', 'analyzer', 'sast', 'security', 'dockerfile', 'bash', 'script', 'cve', 'lint', 'hadolint', 'shellcheck', 'scanner'], action: () => switchPage('page-inspector', 'analyzer') },
+            { id: 'goto-ai', category: 'Workspaces', title: 'Open DevOps AI Copilot & Mentor', icon: '🤖', badge: 'AI Assistant', keywords: ['ai', 'copilot', 'assistant', 'mentor', 'gemini', 'gpt', 'chat', 'bot', 'prompt', 'debug', 'help', 'artificial intelligence'], action: () => switchPage('page-ai', 'ai-assistant') },
+            { id: 'goto-term', category: 'Workspaces', title: 'Open Interactive CLI Sandbox Terminal', icon: '💻', badge: 'Linux Shell', keywords: ['terminal', 'cli', 'bash', 'shell', 'console', 'sandbox', 'command line', 'linux', 'exec'], action: () => switchPage('page-terminal', 'terminal-sandbox') },
+            { id: 'goto-net', category: 'Workspaces', title: 'Open Network Lab & DNS-over-HTTPS Resolver', icon: '📡', badge: 'Google DoH', keywords: ['network', 'dns', 'doh', 'resolver', 'google dns', 'ping', 'ip', 'domain', 'lookup', 'latency', 'subnet', 'cidr'], action: () => switchPage('page-network', 'network') },
+            { id: 'goto-acad', category: 'Workspaces', title: 'Open Curriculum Modules & SRE Quiz', icon: '🎓', badge: 'Academy', keywords: ['academy', 'learn', 'curriculum', 'quiz', 'sre', 'devops', 'modules', 'education', 'test', 'exam'], action: () => switchPage('page-academy', 'academy') },
 
             // Quick SRE Drills
-            { id: 'drill-oom', category: 'SRE Outage Drills', title: 'Trigger Kubernetes Pod OOMKilled Outage Drill', icon: '💥', badge: 'INC-4091', action: () => { switchPage('page-observability'); selectWarRoomIncident('oom'); } },
-            { id: 'drill-502', category: 'SRE Outage Drills', title: 'Trigger Nginx 502 Bad Gateway Outage Drill', icon: '⚠️', badge: 'INC-3882', action: () => { switchPage('page-observability'); selectWarRoomIncident('502'); } },
-            { id: 'drill-tls', category: 'SRE Outage Drills', title: 'Trigger Production Expired TLS Certificate Drill', icon: '🔒', badge: 'INC-5104', action: () => { switchPage('page-observability'); selectWarRoomIncident('tls'); } },
-            { id: 'drill-ddos', category: 'SRE Outage Drills', title: 'Simulate Layer 7 HTTP DDoS Attack Surge', icon: '🌊', badge: 'INC-6219', action: () => { switchPage('page-observability'); selectWarRoomIncident('ddos'); } },
+            { id: 'drill-oom', category: 'SRE Outage Drills', title: 'Trigger Kubernetes Pod OOMKilled Outage Drill', icon: '💥', badge: 'INC-4091', keywords: ['oom', 'oomkilled', 'memory', 'outage', 'drill', 'crash', 'kubernetes', 'pod', 'incident'], action: () => { switchPage('page-observability', 'sre-war-room'); selectWarRoomIncident('oom'); } },
+            { id: 'drill-502', category: 'SRE Outage Drills', title: 'Trigger Nginx 502 Bad Gateway Outage Drill', icon: '⚠️', badge: 'INC-3882', keywords: ['502', 'bad gateway', 'nginx', 'reverse proxy', 'outage', 'drill', 'upstream', 'incident'], action: () => { switchPage('page-observability', 'sre-war-room'); selectWarRoomIncident('502'); } },
+            { id: 'drill-tls', category: 'SRE Outage Drills', title: 'Trigger Production Expired TLS Certificate Drill', icon: '🔒', badge: 'INC-5104', keywords: ['tls', 'ssl', 'certificate', 'expired', 'https', 'crypto', 'outage', 'drill', 'incident'], action: () => { switchPage('page-observability', 'sre-war-room'); selectWarRoomIncident('tls'); } },
+            { id: 'drill-ddos', category: 'SRE Outage Drills', title: 'Simulate Layer 7 HTTP DDoS Attack Surge', icon: '🌊', badge: 'INC-6219', keywords: ['ddos', 'flood', 'surge', 'attack', 'rate limit', 'waf', 'outage', 'drill', 'incident'], action: () => { switchPage('page-observability', 'sre-war-room'); selectWarRoomIncident('ddos'); } },
 
             // Quick Generators
-            { id: 'quick-docker', category: 'Quick Automation', title: 'Quick-Generate Multi-Stage Dockerfile', icon: '🐳', badge: 'Docker', action: () => { switchPage('page-generator'); document.getElementById('genProjectType')?.focus(); } },
-            { id: 'quick-sbom', category: 'Quick Automation', title: 'Export CycloneDX v1.5 SBOM JSON', icon: '📦', badge: 'SBOM', action: () => { switchPage('page-compliance'); document.getElementById('downloadSbomBtn')?.click(); } },
-            { id: 'quick-finops', category: 'Quick Automation', title: 'Run FinOps Cloud Waste Detection Audit', icon: '📉', badge: 'Savings', action: () => { switchPage('page-finops'); document.getElementById('runFinOpsAuditBtn')?.click(); } },
+            { id: 'quick-docker', category: 'Quick Automation', title: 'Quick-Generate Multi-Stage Dockerfile', icon: '🐳', badge: 'Docker', keywords: ['docker', 'dockerfile', 'container', 'generate', 'multistage', 'build', 'manifest'], action: () => { switchPage('page-generator', 'project-generator'); setTimeout(() => document.getElementById('projectManifestInput')?.focus(), 100); } },
+            { id: 'quick-sbom', category: 'Quick Automation', title: 'Export CycloneDX v1.5 SBOM JSON', icon: '📦', badge: 'SBOM', keywords: ['sbom', 'cyclonedx', 'json', 'export', 'dependencies', 'supply chain', 'license'], action: () => { switchPage('page-compliance', 'compliance-studio'); document.getElementById('downloadSbomBtn')?.click(); } },
+            { id: 'quick-finops', category: 'Quick Automation', title: 'Run FinOps Cloud Waste Detection Audit', icon: '📉', badge: 'Savings', keywords: ['finops', 'audit', 'waste', 'savings', 'cost reduction', 'cloud spend', 'infracost'], action: () => { switchPage('page-finops', 'finops-calculator'); document.getElementById('runFinOpsAuditBtn')?.click(); } },
 
             // System Utilities
-            { id: 'util-theme', category: 'System Preferences', title: 'Toggle Light / Dark Mode Theme', icon: '🌓', badge: 'Theme', action: () => document.getElementById('themeToggleBtn')?.click() },
-            { id: 'util-status', category: 'System Preferences', title: 'View Global Cloud Telemetry & Uptime SLA', icon: '📊', badge: '99.995%', action: () => document.getElementById('openStatusModalBtn')?.click() }
+            { id: 'util-theme', category: 'System Preferences', title: 'Toggle Light / Dark Mode Theme', icon: '🌓', badge: 'Theme', keywords: ['theme', 'dark mode', 'light mode', 'appearance', 'toggle', 'color'], action: () => document.getElementById('themeToggleBtn')?.click() },
+            { id: 'util-status', category: 'System Preferences', title: 'View Global Cloud Telemetry & Uptime SLA', icon: '📊', badge: '99.995%', keywords: ['status', 'uptime', 'health', 'sla', 'cloud services', 'api', 'telemetry', 'incident'], action: () => document.getElementById('openStatusModalBtn')?.click() }
         ];
 
         let selectedIndex = 0;
@@ -4967,14 +4986,15 @@ mkdir -p .github/workflows k8s scripts terraform
                 filteredCommands = commandsList.filter(cmd =>
                     cmd.title.toLowerCase().includes(cleanQ) ||
                     cmd.category.toLowerCase().includes(cleanQ) ||
-                    cmd.badge.toLowerCase().includes(cleanQ)
+                    cmd.badge.toLowerCase().includes(cleanQ) ||
+                    (cmd.keywords && cmd.keywords.some(k => k.includes(cleanQ) || cleanQ.includes(k)))
                 );
             }
 
             if (filteredCommands.length === 0) {
                 resultsContainer.innerHTML = `
                     <div style="padding: 2rem 1rem; text-align: center; color: var(--text-muted); font-size: 0.88rem;">
-                        No commands matching "<strong>${escapeHtml(query)}</strong>". Try typing <em>topology</em>, <em>oom</em>, <em>finops</em>, or <em>docker</em>.
+                        No commands matching "<strong>${escapeHtml(query)}</strong>". Try typing <em>docker</em>, <em>k8s</em>, <em>finops</em>, <em>incident</em>, or <em>security</em>.
                     </div>
                 `;
                 return;
@@ -4988,7 +5008,6 @@ mkdir -p .github/workflows k8s scripts terraform
             });
 
             let html = '';
-            let currentFlatIndex = 0;
 
             for (const [category, items] of Object.entries(groups)) {
                 html += `<div class="cmd-group">`;
@@ -5018,7 +5037,7 @@ mkdir -p .github/workflows k8s scripts terraform
         }
 
         function openPalette() {
-            modal.classList.add('active');
+            modal.classList.add('active', 'open');
             modal.setAttribute('aria-hidden', 'false');
             input.value = '';
             selectedIndex = 0;
@@ -5027,7 +5046,7 @@ mkdir -p .github/workflows k8s scripts terraform
         }
 
         function closePalette() {
-            modal.classList.remove('active');
+            modal.classList.remove('active', 'open');
             modal.setAttribute('aria-hidden', 'true');
         }
 
@@ -5041,10 +5060,18 @@ mkdir -p .github/workflows k8s scripts terraform
 
         // Event listeners
         if (openBtn) {
-            openBtn.addEventListener('click', openPalette);
+            openBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                openPalette();
+            });
         }
         if (closeBtn) {
-            closeBtn.addEventListener('click', closePalette);
+            closeBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                closePalette();
+            });
         }
 
         modal.addEventListener('click', (e) => {
@@ -5055,12 +5082,12 @@ mkdir -p .github/workflows k8s scripts terraform
         window.addEventListener('keydown', (e) => {
             if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
                 e.preventDefault();
-                if (modal.classList.contains('active')) {
+                if (modal.classList.contains('active') || modal.classList.contains('open')) {
                     closePalette();
                 } else {
                     openPalette();
                 }
-            } else if (e.key === 'Escape' && modal.classList.contains('active')) {
+            } else if (e.key === 'Escape' && (modal.classList.contains('active') || modal.classList.contains('open'))) {
                 closePalette();
             }
         });
@@ -5414,19 +5441,19 @@ Properties:
                 nodeModalMemory.textContent = data.memory;
                 nodeModalYaml.textContent = data.yaml;
 
-                nodeModal.classList.add('active');
+                nodeModal.classList.add('active', 'open');
                 nodeModal.setAttribute('aria-hidden', 'false');
             });
         });
 
         if (closeNodeBtn && nodeModal) {
             closeNodeBtn.addEventListener('click', () => {
-                nodeModal.classList.remove('active');
+                nodeModal.classList.remove('active', 'open');
                 nodeModal.setAttribute('aria-hidden', 'true');
             });
             nodeModal.addEventListener('click', (e) => {
                 if (e.target === nodeModal) {
-                    nodeModal.classList.remove('active');
+                    nodeModal.classList.remove('active', 'open');
                     nodeModal.setAttribute('aria-hidden', 'true');
                 }
             });

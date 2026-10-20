@@ -52,6 +52,11 @@ run_test "No hardcoded AWS keys in public/" "! grep -riE 'AKIA[0-9A-Z]{16}' publ
 run_test "Hardened nginx.conf exists" "[ -s nginx.conf ]"
 run_test "Dockerfile exists & includes HEALTHCHECK" "grep -q 'HEALTHCHECK' Dockerfile"
 
+# 5. Interactive DOM, Search, and Button Audit
+if [ -f "scripts/test-buttons-and-search.js" ] && [ -d "node_modules/jsdom" ]; then
+    run_test "Interactive DOM & Button Audit (35/35)" "node scripts/test-buttons-and-search.js"
+fi
+
 echo "========================================"
 if [ "$FAILED" -eq 0 ]; then
     echo "🎉 All tests passed successfully! Ready for packaging/deployment."

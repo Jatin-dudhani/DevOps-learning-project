@@ -1,0 +1,12 @@
+{
+  "name": "devops-learning-platform",
+  "version": "2.4.0",
+  "description": "Enterprise CloudOps & SRE Learning Platform",
+  "scripts": {
+    "build": "bash scripts/build.sh",
+    "test": "bash scripts/test.sh"
+  },
+  "devDependencies": {
+    "jsdom": "^30.1.3"
+  }
+}
