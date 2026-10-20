@@ -1777,9 +1777,11 @@ volumes:
         });
 
         if (filtered.length === 0) {
-            grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 2rem; color: var(--text-muted);">
-                No matching CLI commands found for "${query}". Try another keyword.
-            </div>`;
+            grid.innerHTML = '';
+            const emptyDiv = document.createElement('div');
+            emptyDiv.style.cssText = 'grid-column: 1/-1; text-align: center; padding: 2rem; color: var(--text-muted);';
+            emptyDiv.textContent = `No matching CLI commands found for "${query}". Try another keyword.`;
+            grid.appendChild(emptyDiv);
             return;
         }
 
@@ -2491,7 +2493,7 @@ server {
     // =========================================================================
     // 15. DevOps AI Assistant & CloudOps Mentor
     // =========================================================================
-    const AI_API_KEY_STORAGE = 'devops_gemini_api_key';
+    let inMemoryGeminiApiKey = '';
 
     function initAiCopilot() {
         const form = document.getElementById('aiChatForm');
@@ -2571,11 +2573,10 @@ server {
             });
         }
 
-        // Modal settings
+        // Modal settings (in-memory session storage only)
         if (settingsBtn && modal) {
             settingsBtn.addEventListener('click', () => {
-                const existing = localStorage.getItem(AI_API_KEY_STORAGE) || '';
-                if (apiKeyInput) apiKeyInput.value = existing;
+                if (apiKeyInput) apiKeyInput.value = inMemoryGeminiApiKey;
                 modal.classList.add('open');
             });
         }
@@ -2596,8 +2597,8 @@ server {
             saveKeyBtn.addEventListener('click', () => {
                 const key = apiKeyInput ? apiKeyInput.value.trim() : '';
                 if (key) {
-                    localStorage.setItem(AI_API_KEY_STORAGE, key);
-                    appendBotMessage(`🔑 <strong>Google Gemini API Key Saved!</strong> Your queries will now be routed directly through live Google Gemini 1.5 Flash.`);
+                    inMemoryGeminiApiKey = key;
+                    appendBotMessage(`🔑 <strong>Google Gemini API Key Configured (Session Memory)!</strong> Your queries will now be routed directly through live Google Gemini 1.5 Flash.`);
                 }
                 if (modal) modal.classList.remove('open');
             });
@@ -2605,7 +2606,7 @@ server {
 
         if (clearKeyBtn) {
             clearKeyBtn.addEventListener('click', () => {
-                localStorage.removeItem(AI_API_KEY_STORAGE);
+                inMemoryGeminiApiKey = '';
                 if (apiKeyInput) apiKeyInput.value = '';
                 appendBotMessage(`ℹ️ API Key cleared. Copilot has switched back to the built-in offline DevOps reasoning engine.`);
                 if (modal) modal.classList.remove('open');
@@ -2643,7 +2644,7 @@ server {
         thread.appendChild(loadingEl);
         thread.scrollTop = thread.scrollHeight;
 
-        const apiKey = localStorage.getItem(AI_API_KEY_STORAGE);
+        const apiKey = inMemoryGeminiApiKey;
 
         if (apiKey) {
             // Live Gemini API Call
@@ -2861,16 +2862,23 @@ CMD ["node", "dist/server.js"]</code></pre>
         function appendLine(text, cssClass = '') {
             const line = document.createElement('div');
             line.className = `term-line ${cssClass}`;
-            line.innerHTML = text;
+            line.textContent = text;
+            body.appendChild(line);
+            body.scrollTop = body.scrollHeight;
+        }
+
+        function appendHtmlLine(html, cssClass = '') {
+            const line = document.createElement('div');
+            line.className = `term-line ${cssClass}`;
+            line.innerHTML = html;
             body.appendChild(line);
             body.scrollTop = body.scrollHeight;
         }
 
         function clearCli() {
-            body.innerHTML = `
-                <div class="term-line term-dim"># Terminal screen cleared.</div>
-                <div class="term-line term-dim"># Type "help" or "commands" to inspect available tools.</div>
-            `;
+            body.innerHTML = '';
+            appendLine('# Terminal screen cleared.', 'term-dim');
+            appendLine('# Type "help" or "commands" to inspect available tools.', 'term-dim');
         }
 
         if (clearBtn) {
@@ -2886,7 +2894,19 @@ CMD ["node", "dist/server.js"]</code></pre>
                 cmdHistory.push(cmd);
                 historyIndex = cmdHistory.length;
 
-                appendLine(`<span style="color: var(--color-success); font-weight: 700;">ubuntu@devops-node-01:~$</span> <span class="term-cmd">${escapeHtml(cmd)}</span>`);
+                const promptLine = document.createElement('div');
+                promptLine.className = 'term-line';
+                const userBadge = document.createElement('span');
+                userBadge.style.cssText = 'color: var(--color-success); font-weight: 700;';
+                userBadge.textContent = 'ubuntu@devops-node-01:~$ ';
+                const cmdSpan = document.createElement('span');
+                cmdSpan.className = 'term-cmd';
+                cmdSpan.textContent = cmd;
+                promptLine.appendChild(userBadge);
+                promptLine.appendChild(cmdSpan);
+                body.appendChild(promptLine);
+                body.scrollTop = body.scrollHeight;
+
                 executeCliCommand(cmd);
             } else if (e.key === 'ArrowUp') {
                 e.preventDefault();
@@ -2914,7 +2934,7 @@ CMD ["node", "dist/server.js"]</code></pre>
             switch (base) {
                 case 'help':
                 case 'commands':
-                    appendLine(`
+                    appendHtmlLine(`
 <strong>DevOps Interactive Linux CLI Sandbox - Supported Operations:</strong>
   • <code>docker ps</code> / <code>docker images</code> / <code>docker inspect &lt;container&gt;</code>
   • <code>git status</code> / <code>git log</code> / <code>git branch</code>
@@ -2958,7 +2978,7 @@ CMD ["node", "dist/server.js"]</code></pre>
                     } else {
                         currentUmask = args[0];
                         if (currentUmask === '077' || currentUmask === '0077') {
-                            appendLine(`umask set to ${currentUmask}. Newly created files: <strong>0600 (-rw-------)</strong>, directories: <strong>0700 (drwx------)</strong>.`, 'term-success');
+                            appendHtmlLine(`umask set to ${escapeHtml(currentUmask)}. Newly created files: <strong>0600 (-rw-------)</strong>, directories: <strong>0700 (drwx------)</strong>.`, 'term-success');
                         } else {
                             appendLine(`umask updated to ${currentUmask}. Note: Non-077 masks in CI/CD may expose private SSH keys!`, 'term-warn');
                         }
@@ -3119,7 +3139,7 @@ ubuntu      1420  0.0  0.2  18400  5100 pts/0    Ss   12:15   0:00 -bash`);
                     break;
 
                 default:
-                    appendLine(`bash: ${escapeHtml(base)}: command not found. Type <strong>help</strong> to see available operations.`, 'term-error');
+                    appendLine(`bash: ${base}: command not found. Type "help" to see available operations.`, 'term-error');
                     break;
             }
         }
@@ -4837,7 +4857,14 @@ mkdir -p .github/workflows k8s scripts terraform
             animation: modalSlideDown 0.2s ease forwards;
             transition: opacity 0.25s ease, transform 0.25s ease;
         `;
-        toast.innerHTML = `<span>${type === 'success' ? '✅' : type === 'warn' ? '⚠️' : 'ℹ️'}</span><span>${message}</span>`;
+        const iconSpan = document.createElement('span');
+        iconSpan.textContent = type === 'success' ? '✅' : type === 'warn' ? '⚠️' : 'ℹ️';
+
+        const msgSpan = document.createElement('span');
+        msgSpan.textContent = message;
+
+        toast.appendChild(iconSpan);
+        toast.appendChild(msgSpan);
         container.appendChild(toast);
 
         setTimeout(() => {
